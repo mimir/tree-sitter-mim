@@ -209,7 +209,7 @@ module.exports = grammar({
       optional(
         seq(
           ",",
-          field("curry", $.int_literal),
+          field("curry", $.nat_literal),
           optional(
             seq(
               ",",
@@ -339,7 +339,8 @@ module.exports = grammar({
       $.annotated,
       $.bool_literal,
       $.float_literal,
-      $.int_literal,
+      $.nat_literal,
+      $.idx_literal,
       $.string_literal,
       $.char_literal,
     ),
@@ -351,17 +352,28 @@ module.exports = grammar({
 
     bool_literal: $ => choice("tt", "ff"),
 
-    int_literal: $ => choice(
-       // binary literal
+    nat_literal: $ => choice(
+      // binary literal
       /[\+\-]?0[bB][01]+/,
-       // oct literal
+      // oct literal
       /[\+\-]?0[oO][0-7]+/,
-       // decimal literal
+      // decimal literal
       /[\+\-]?[0-9]+/,
-       // hexadecimal literal
+      // hexadecimal literal
       /[\+\-]?0[xX][0-9a-fA-F]+/,
     ),
 
+    idx_literal: $ => seq(
+      field("value", alias($.nat_literal, "value")),
+      choice(
+        token.immediate(/_[0-9]+/),
+        seq(
+          token.immediate(/[iI]/),
+          token.immediate(/[0-9]+/),
+        )
+      )
+    ),
+    
     float_literal: $ => token(choice(
       // decimal float literal x.
       /[\+\-]?[0-9]+\.[0-9]*([eE][\+\-][0-9]+)?/,

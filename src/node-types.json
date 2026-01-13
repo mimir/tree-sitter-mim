@@ -174,11 +174,11 @@
         "named": true
       },
       {
-        "type": "insert",
+        "type": "idx_literal",
         "named": true
       },
       {
-        "type": "int_literal",
+        "type": "insert",
         "named": true
       },
       {
@@ -187,6 +187,10 @@
       },
       {
         "type": "match",
+        "named": true
+      },
+      {
+        "type": "nat_literal",
         "named": true
       },
       {
@@ -294,7 +298,11 @@
             "named": true
           },
           {
-            "type": "int_literal",
+            "type": "idx_literal",
+            "named": true
+          },
+          {
+            "type": "nat_literal",
             "named": true
           },
           {
@@ -370,7 +378,7 @@
         "required": false,
         "types": [
           {
-            "type": "int_literal",
+            "type": "nat_literal",
             "named": true
           }
         ]
@@ -609,6 +617,22 @@
     }
   },
   {
+    "type": "idx_literal",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "value",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "implicit",
     "named": true,
     "fields": {},
@@ -671,11 +695,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "int_literal",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "lam",
@@ -817,6 +836,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "nat_literal",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "pack",
@@ -1094,6 +1118,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "value",
+    "named": false,
+    "fields": {}
   },
   {
     "type": "where",
