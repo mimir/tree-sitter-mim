@@ -744,7 +744,15 @@
           "named": true
         },
         {
+          "type": "lam",
+          "named": true
+        },
+        {
           "type": "lam_domain",
+          "named": true
+        },
+        {
+          "type": "rec",
           "named": true
         }
       ]

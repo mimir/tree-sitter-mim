@@ -276,6 +276,12 @@ module.exports = grammar({
           field("value", $.expression),
         )
       ),
+      optional(
+        seq(
+          "and",
+          choice($.lam, $.rec),
+        )
+      )
     )),
 
     rule: $ => seq(
