@@ -1,71 +1,124 @@
 =====
-single import
+plugin
 =====
 
-import compile;
+plugin mem;
 
 ---
 
-(source_file (import (value_identifier)))
+(source_file
+  (plugin
+    (identifier)))
 
 =====
-multiple import
+plugin as splice
 =====
 
-import mem;
-import compile;
+pub plugin core as *;
+
+---
+
+(source_file
+  (plugin
+    (modifier)
+    (identifier)))
+
+=====
+import by name
+=====
+
 import foo;
 
-(source_file
-	(import (value_identifier))
-	(import (value_identifier))
-	(import (value_identifier))
-)
-
-=====
-single plugin
-=====
-
-plugin mem;
-
 ---
 
-(source_file (plugin (value_identifier)))
+(source_file
+  (import
+    (identifier)))
 
 =====
-multiple plugins
+import by file name
 =====
 
-plugin mem;
-plugin core;
-plugin blub;
+import "some/dir/foo.mim" as bar;
 
 ---
 
 (source_file
-	(plugin (value_identifier))
-	(plugin (value_identifier))
-	(plugin (value_identifier))
-)
+  (import
+    (string_literal)
+    (identifier)))
 
 =====
-mixed dependencies
+use
 =====
 
-plugin mem;
-import compile;
-plugin core;
-import foo;
-plugin blub;
+use core.ops.n;
 
 ---
 
 (source_file
-	(plugin (value_identifier))
-	(import (value_identifier))
-	(plugin (value_identifier))
-	(import (value_identifier))
-	(plugin (value_identifier))
-)
+  (use
+    (path
+      (identifier)
+      (identifier)
+      (identifier))))
 
+=====
+use as splice
+=====
 
+pub use eq as *;
+
+---
+
+(source_file
+  (use
+    (modifier)
+    (path
+      (identifier))))
+
+=====
+module
+=====
+
+pub mod mode {
+    anx let us = 0b00;
+    anx nsw = uS;
+}
+
+---
+
+(source_file
+  (mod
+    (modifier)
+    (identifier)
+    (let
+      (modifier)
+      (identifier)
+      (nat_literal))
+    (anx
+      (identifier)
+      (path
+        (identifier)))))
+
+=====
+nested modules
+=====
+
+mod a {
+    priv mod b {
+        let x = 0;
+    }
+}
+
+---
+
+(source_file
+  (mod
+    (identifier)
+    (mod
+      (modifier)
+      (identifier)
+      (let
+        (identifier)
+        (nat_literal)))))

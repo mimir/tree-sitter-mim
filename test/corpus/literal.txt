@@ -1,0 +1,213 @@
+=====
+nat literals
+=====
+
+let a = 23;
+let b = 0b1010;
+let c = 0o777;
+let d = 0xDeadBeef;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (nat_literal))
+  (let
+    (identifier)
+    (nat_literal))
+  (let
+    (identifier)
+    (nat_literal))
+  (let
+    (identifier)
+    (nat_literal)))
+
+=====
+idx literals
+=====
+
+let a = 1₂;
+let b = 1_2;
+let c = 23I32;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (idx_literal))
+  (let
+    (identifier)
+    (idx_literal))
+  (let
+    (identifier)
+    (idx_literal)))
+
+=====
+float literals
+=====
+
+let a = 1.5;
+let b = 1.;
+let c = .5;
+let d = 1e10;
+let e = 1.5e-3;
+let f = 0x1.8p3;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (float_literal))
+  (let
+    (identifier)
+    (float_literal))
+  (let
+    (identifier)
+    (float_literal))
+  (let
+    (identifier)
+    (float_literal))
+  (let
+    (identifier)
+    (float_literal))
+  (let
+    (identifier)
+    (float_literal)))
+
+=====
+signed literals
+=====
+
+let a = -23;
+let b = +23;
+let c = f (-23);
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (signed
+      (nat_literal)))
+  (let
+    (identifier)
+    (signed
+      (nat_literal)))
+  (let
+    (identifier)
+    (application
+      (path
+        (identifier))
+      (tuple
+        (signed
+          (nat_literal))))))
+
+=====
+ascribed literals
+=====
+
+let a = 23:I32;
+let b = -1:I32;
+let c = ⊥:Nat;
+let d = ⊤;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (annotated
+      (nat_literal)
+      (primitive)))
+  (let
+    (identifier)
+    (signed
+      (annotated
+        (nat_literal)
+        (primitive))))
+  (let
+    (identifier)
+    (annotated
+      (bot)
+      (primitive)))
+  (let
+    (identifier)
+    (top)))
+
+=====
+ascii bot and top
+=====
+
+let a = bot;
+let b = top:Nat;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (bot))
+  (let
+    (identifier)
+    (annotated
+      (top)
+      (primitive))))
+
+=====
+booleans
+=====
+
+let a = tt;
+let b = ff;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (primitive))
+  (let
+    (identifier)
+    (primitive)))
+
+=====
+char and string literals
+=====
+
+let a = 'x';
+let b = '\n';
+let c = "hello\n";
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (char_literal))
+  (let
+    (identifier)
+    (char_literal))
+  (let
+    (identifier)
+    (string_literal)))
+
+=====
+an ascription binds tighter than application
+=====
+
+let a = 0:Idx s;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (application
+      (annotated
+        (nat_literal)
+        (primitive))
+      (path
+        (identifier)))))

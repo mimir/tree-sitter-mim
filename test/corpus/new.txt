@@ -1,123 +1,255 @@
 =====
-simple let declaration
+bare identifier pattern
 =====
 
-let x = 3;
+let x = 0;
 
 ---
 
 (source_file
-	(let
-		(pattern (identifier))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (nat_literal)))
 
 =====
-implicit pattern
+typed binder
 =====
 
-con foo {A: *} = ();
+con f (x: Nat) = ();
 
 ---
 
 (source_file
-	(lam
-		name: (identifier)
-		(implicit (battern (identifier) type: (primitive)))
-		value: (tuple)))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (tuple)))
 
 =====
-multiple paren domains
+identifier group
 =====
 
-con foo (n: Nat) (m: Nat) = ();
+con f (a b c: Nat, d e: Bool) = ();
 
 ---
 
 (source_file
-	(lam
-		name: (identifier)
-		(pattern (pattern (identifier) type: (primitive)))
-		(pattern (pattern (identifier) type: (primitive)))
-		value: (tuple)))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (group
+          (identifier)
+          (identifier)
+          (identifier)
+          (primitive))
+        (group
+          (identifier)
+          (identifier)
+          (primitive))))
+    (tuple)))
 
 =====
-simple group
+telescope group
 =====
 
-let (a b: Nat) = 0;
+let t = [a b c: Nat, d e: Bool];
 
 ---
 
 (source_file
-	(let
-		(pattern (group (identifier) (identifier) type: (primitive)))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (sigma
+      (group
+        (identifier)
+        (identifier)
+        (identifier)
+        (primitive))
+      (group
+        (identifier)
+        (identifier)
+        (primitive)))))
 
 =====
-where semicolon
+an unnamed telescope element is a type
 =====
 
-con t() = body
-	where
-	    con body (acc: A) = head;
-	end
-end;
-
-=====
-annex float whoopsie
-=====
-
-let x = %test.foo.bar;
+let t = [Nat, Bool];
 
 ---
 
 (source_file
-	(let
-		(pattern (identifier))
-		value: (annex
-			module: (identifier)
-			name: (identifier)
-			subtag: (identifier))))
+  (let
+    (identifier)
+    (sigma
+      (primitive)
+      (primitive))))
 
 =====
-fake battern
+a telescope element may be an application
 =====
 
-lam foo [[Nat] -> Nat] = 0
+let t = Cn [mem: mem.M 0, I32];
 
 ---
 
 (source_file
-	(lam
-		name: (identifier)
-		(battern
-			(battern
-				type: (pi (battern type: (primitive)) (primitive))))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (cn_type
+      (sigma
+        (typed_binder
+          (identifier)
+          (application
+            (path
+              (identifier)
+              (identifier))
+            (nat_literal)))
+        (primitive)))))
 
 =====
-stupid app lambda
+fake telescope
 =====
 
-let foo = fn mem (a: Nat) = 0;
+lam foo [[Nat] → Nat] = 0;
 
 ---
 
 (source_file
-	(let
-		(pattern (identifier))
-		value: (lambda
-			(pattern (identifier))
-			(pattern
-				(pattern (identifier) type: (primitive)))
-			(int_literal))))
+  (lam
+    (identifier)
+    (domain
+      (sigma
+        (pi
+          (sigma
+            (primitive))
+          (primitive))))
+    (nat_literal)))
 
 =====
-let annex
+alias pattern
 =====
 
-let %test.foo = 0;
+con f ((a, b) as ab) = ();
 
 ---
 
-(source_file (let (annex module: (identifier) name: (identifier)) value: (int_literal)))
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (alias_pattern
+          (tuple_pattern
+            (identifier)
+            (identifier))
+          (identifier))))
+    (tuple)))
+
+=====
+partial evaluation filter
+=====
+
+lam f (x: I32) @ x : I32 = x;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive)))
+      (filter
+        (path
+          (identifier))))
+    (primitive)
+    (path
+      (identifier))))
+
+=====
+curried domains
+=====
+
+lam f (T: *) {s: Nat} [Nat] (x: T): T = x;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (star))))
+    (domain
+      (implicit
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (domain
+      (sigma
+        (primitive)))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (path
+            (identifier)))))
+    (path
+      (identifier))
+    (path
+      (identifier))))
+
+=====
+trailing commas
+=====
+
+let t = [Nat, Bool,];
+con f (a: Nat,) = ();
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (sigma
+      (primitive)
+      (primitive)))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (tuple)))
+
+=====
+comments
+=====
+
+/// doc comment
+// line comment
+/* block
+   comment */
+let x = 0;
+
+---
+
+(source_file
+  (doc_comment
+    (doc_content))
+  (line_comment)
+  (block_comment)
+  (let
+    (identifier)
+    (nat_literal)))

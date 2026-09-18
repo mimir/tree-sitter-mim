@@ -1,115 +1,248 @@
 =====
-comments
+simple let declaration
 =====
 
-// blub
-let x = 0;
-/// doc
-/* test
- *
- * some stuff
- */
-let y = 1;
+let x = 3;
 
 ---
 
 (source_file
-	(line_comment)
-	(let (pattern (value_identifier)) value: (int_literal))
-	(doc_comment (doc_content))
-	(block_comment)
-	(let (pattern (value_identifier)) value: (int_literal)))
+  (let
+    (identifier)
+    (nat_literal)))
 
 =====
-let identifier
+let with a tuple pattern
 =====
 
-let x = 0;
-
----
-
-(source_file (let (pattern (value_identifier)) value: (int_literal)))
-
-=====
-let annex
-=====
-
-let %core.mode.us = 0b00;
-
----
-
-(source_file (let (annex
-	module: (value_identifier)
-	name: (value_identifier)
-	subtag: (value_identifier)) value: (int_literal)))
-
-=====
-let with comment
-=====
-
-let x = 0; // test
-
----
-
-(source_file (let (pattern (value_identifier)) value: (int_literal)) (line_comment))
-
-=====
-let with trailing space and additional line
-=====
-
-let x = 0; 
-
-let x = 0;
+let (m, ptr) = mem.alloc (I32, 0) m;
 
 ---
 
 (source_file
-	(let (pattern (value_identifier)) (int_literal))
-	(let (pattern (value_identifier)) (int_literal)))
+  (let
+    (tuple_pattern
+      (identifier)
+      (identifier))
+    (application
+      (application
+        (path
+          (identifier)
+          (identifier))
+        (tuple
+          (primitive)
+          (nat_literal)))
+      (path
+        (identifier)))))
 
 =====
-let with trailing space
+let with an alias pattern
 =====
 
-let x = 0; 
-
----
-
-(source_file (let (pattern (value_identifier)) (int_literal)))
-
-=====
-let with useless whitespace
-=====
-
-	let		    x       =  0;
-
----
-
-(source_file (let (pattern (value_identifier)) (int_literal)))
-
-=====
-let behind axiom
-=====
-
-axm %core.ncmp.blub: Bool, normalize_ncmp;
-let %core.mode.us = 0b00;
-let %core.mode.uS = 0b01;
+let (a, b, c) as abc = (1, 2, 3);
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			subtag: (value_identifier))
-		type: (primitive_type)
-		normalizer: (value_identifier))
-	(let (annex
-		module: (value_identifier)
-		name: (value_identifier)
-		subtag: (value_identifier)) value: (int_literal))
-	(let (annex
-		module: (value_identifier)
-		name: (value_identifier)
-		subtag: (value_identifier)) value: (int_literal)))
+  (let
+    (alias_pattern
+      (tuple_pattern
+        (identifier)
+        (identifier)
+        (identifier))
+      (identifier))
+    (tuple
+      (nat_literal)
+      (nat_literal)
+      (nat_literal))))
+
+=====
+let with a group
+=====
+
+let (a b: Nat) = 0;
+
+---
+
+(source_file
+  (let
+    (tuple_pattern
+      (group
+        (identifier)
+        (identifier)
+        (primitive)))
+    (nat_literal)))
+
+=====
+let binding an infix operator
+=====
+
+pub let `+ = core.nat.add;
+
+---
+
+(source_file
+  (let
+    (modifier)
+    (identifier)
+    (path
+      (identifier)
+      (identifier)
+      (identifier))))
+
+=====
+annex let
+=====
+
+anx let us = 0b00;
+
+---
+
+(source_file
+  (let
+    (modifier)
+    (identifier)
+    (nat_literal)))
+
+=====
+alias declaration
+=====
+
+anx nsw = core.mode.uS;
+
+---
+
+(source_file
+  (anx
+    (identifier)
+    (path
+      (identifier)
+      (identifier)
+      (identifier))))
+
+=====
+recursive declaration
+=====
+
+rec S = [n: Nat, «n; Nat»];
+
+---
+
+(source_file
+  (rec
+    (identifier)
+    (sigma
+      (typed_binder
+        (identifier)
+        (primitive))
+      (array
+        (shape
+          (arity
+            (path
+              (identifier))))
+        (primitive)))))
+
+=====
+mutually recursive declarations
+=====
+
+rec A = [Nat, B] and B = [Nat, A];
+
+---
+
+(source_file
+  (rec
+    (identifier)
+    (sigma
+      (primitive)
+      (path
+        (identifier)))
+    (and
+      (identifier)
+      (sigma
+        (primitive)
+        (path
+          (identifier))))))
+
+=====
+rec continued by a lambda declaration
+=====
+
+rec T = Nat and lam f (x: T): T = x;
+
+---
+
+(source_file
+  (rec
+    (identifier)
+    (primitive)
+    (and
+      (identifier)
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (path
+              (identifier)))))
+      (path
+        (identifier))
+      (path
+        (identifier)))))
+
+=====
+rewrite rule
+=====
+
+rule foo (a: Nat): (a + a) => (a * 2);
+
+---
+
+(source_file
+  (rule
+    (identifier)
+    (tuple_pattern
+      (typed_binder
+        (identifier)
+        (primitive)))
+    (tuple
+      (binary_expression
+        (path
+          (identifier))
+        (path
+          (identifier))))
+    (tuple
+      (binary_expression
+        (path
+          (identifier))
+        (nat_literal)))))
+
+=====
+guarded normalizing rule
+=====
+
+norm bar (a b: Nat): a + b when a == b => a * 2;
+
+---
+
+(source_file
+  (rule
+    (identifier)
+    (tuple_pattern
+      (group
+        (identifier)
+        (identifier)
+        (primitive)))
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier)))
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier)))
+    (binary_expression
+      (path
+        (identifier))
+      (nat_literal))))

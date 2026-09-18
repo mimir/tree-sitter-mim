@@ -1,303 +1,202 @@
-===
+=====
 simple axiom
-===
+=====
 
-axm %core.whatever: Nat → Nat;
+axm idx_unsafe: Nat → Idx ⊤:Nat, normalize_idx_unsafe;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		type: (function_type
-			(primitive_type)
-			(primitive_type))))
+  (axm
+    (identifier)
+    (pi
+      (primitive)
+      (application
+        (primitive)
+        (annotated
+          (top)
+          (primitive))))
+    (identifier)))
 
-===
-simple axiom with comment
-===
+=====
+axiom tag group
+=====
 
-axm %core.whatever: Nat → Nat; // test
+axm nat.(add, sub, mul, div, rem): «2; Nat» → Nat, normalize_nat;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		type: (function_type
-			(primitive_type)
-			(primitive_type)))
-	(line_comment))
+  (axm
+    (identifier)
+    (tag_list
+      (tag
+        (identifier))
+      (tag
+        (identifier))
+      (tag
+        (identifier))
+      (tag
+        (identifier))
+      (tag
+        (identifier)))
+    (pi
+      (array
+        (shape
+          (arity
+            (nat_literal)))
+        (primitive))
+      (primitive))
+    (identifier)))
 
-===
-simple axiom with trailing space
-===
+=====
+axiom tag aliases
+=====
 
-axm %core.whatever: Nat → Nat;
+axm ncmp.(gle = f, glE = e, gLe = l): «2; Nat» → Bool, normalize_ncmp;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		type: (function_type
-			(primitive_type)
-			(primitive_type))))
+  (axm
+    (identifier)
+    (tag_list
+      (tag
+        (identifier)
+        (identifier))
+      (tag
+        (identifier)
+        (identifier))
+      (tag
+        (identifier)
+        (identifier)))
+    (pi
+      (array
+        (shape
+          (arity
+            (nat_literal)))
+        (primitive))
+      (primitive))
+    (identifier)))
 
 =====
-axiom with subgroups
+anonymous axiom group
 =====
 
-axm %core.nat(add, sub, mul): «2; Nat» → Nat;
+axm (a, b): Nat;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier))
-		type: (function_type
-			(array_type
-				size: (int_literal)
-				type: (primitive_type))
-			(primitive_type))))
+  (axm
+    (tag_list
+      (tag
+        (identifier))
+      (tag
+        (identifier)))
+    (primitive)))
 
 =====
-axiom with aliases
+axiom curry and trip counter
 =====
 
-axm %test.foo(blub = b = blb, krams = k): Nat;
+axm f: Nat → Nat, normalize_f, 1, 2;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			(value_identifier)
-			subtag: (value_identifier)
-			subtag: (value_identifier)
-			(value_identifier)
-			subtag: (value_identifier))
-		type: (primitive_type)))
+  (axm
+    (identifier)
+    (pi
+      (primitive)
+      (primitive))
+    (identifier)
+    (nat_literal)
+    (nat_literal)))
 
 =====
-axiom with normalizer
+axiom with implicit domains
 =====
 
-axm %test.norm.alize: Nat, normalize;
+axm wrap.(add, sub, mul, shl): [m: Nat] → {s: Nat} → «2; Idx s» → Idx s, normalize_wrap;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			subtag: (value_identifier))
-		type: (primitive_type)
-		normalizer: (value_identifier)))
+  (axm
+    (identifier)
+    (tag_list
+      (tag
+        (identifier))
+      (tag
+        (identifier))
+      (tag
+        (identifier))
+      (tag
+        (identifier)))
+    (pi
+      (sigma
+        (typed_binder
+          (identifier)
+          (primitive)))
+      (pi
+        (implicit
+          (typed_binder
+            (identifier)
+            (primitive)))
+        (pi
+          (array
+            (shape
+              (arity
+                (nat_literal)))
+            (application
+              (primitive)
+              (path
+                (identifier))))
+          (application
+            (primitive)
+            (path
+              (identifier))))))
+    (identifier)))
 
 =====
-idx axiom
+axiom with an identifier group
 =====
 
-axm %core.idx: [s: Nat] → [m: Nat] → [l: Nat] → Idx s, normalize_idx;
+axm abs: {s a: Nat} → [mem.M a, Idx s] → [mem.M a, Idx s], normalize_abs;
 
 ---
 
 (source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		type: (function_type
-			(pattern (pattern (value_identifier) type: (primitive_type)))
-			(function_type
-				(pattern (pattern (value_identifier) type: (primitive_type)))
-				(function_type
-					(pattern (pattern (value_identifier) type: (primitive_type)))
-					(primitive_type (value_identifier)))))
-		normalizer: (value_identifier)))
-
-=====
-bit2 axiom
-=====
-
-axm %core.bit2( f,      nor, nciff, nfst, niff, nsnd, xor_, nand,
-                and_,  nxor,   snd,  iff,  fst, ciff,  or_,    t):
-    {s: Nat} → [m: Nat] → «2; Idx s» → Idx s , normalize_bit2;
-
----
-
-(source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier)
-			(value_identifier))
-		type: (function_type
-			(pattern (pattern (value_identifier) type: (primitive_type)))
-			(function_type
-				(pattern (pattern (value_identifier) type: (primitive_type)))
-				(function_type
-					(array_type
-						size: (int_literal)
-						type: (primitive_type (value_identifier)))
-					(primitive_type (value_identifier)))))
-		normalizer: (value_identifier)))
-
-=====
-mat axiom
-=====
-
-axm %matrix.Mat: [n: Nat, S: «n; Nat», T: *] → *;
-
----
-
-(source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (type_identifier))
-		type: (function_type
-			(pattern
-				(pattern (value_identifier) type: (primitive_type))
-				(pattern (type_identifier)
-					type: (array_type size: (value_identifier) type: (primitive_type)))
-				(pattern (type_identifier) type: (primitive_type)))
-			(primitive_type))))
-
-=====
-annotated expression in array size
-=====
-
-axm %test.blub.ding: <<a: b; Nat>>;
-
----
-
-(source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			subtag: (value_identifier))
-		type: (array_type
-			size: (annotated value: (value_identifier) type: (value_identifier))
-			type: (primitive_type))))
-
-=====
-mat map reduce
-=====
-
-axm %matrix.map_reduce:
-    [
-        n: Nat, S: «n; Nat», T: *,
-        m: Nat,
-        NI: «m; Nat»,
-        TI: «m; *»,
-        SI: «i:m; «NI#i; Nat»»
-    ]
-  → [
-        mem:    %mem.M,
-        zero:   T,
-        comb:   Fn [%mem.M, T, «i: m; TI#i»] → [%mem.M, T],
-        input:  «i: m; [«NI#i; Nat», %matrix.Mat (NI#i, SI#i, TI#i)]»
-    ] → [%mem.M, %matrix.Mat (n, S, T)],
-    normalize_map_reduce;
-
----
-
-(source_file
-	(axiom
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		type: (function_type
-			(pattern
-				(pattern (value_identifier) type: (primitive_type))
-				(pattern (type_identifier) type: (array_type size: (value_identifier) type: (primitive_type)))
-				(pattern (type_identifier) type: (primitive_type))
-				(pattern (value_identifier) type: (primitive_type))
-				(pattern (type_identifier)
-					type: (array_type size: (value_identifier) type: (primitive_type)))
-				(pattern (type_identifier)
-					type: (array_type size: (value_identifier) type: (primitive_type)))
-				(pattern (type_identifier)
-					type: (array_type
-						size: (annotated value: (value_identifier) type: (value_identifier))
-						type: (array_type
-							size: (extraction (type_identifier) (value_identifier))
-							type: (primitive_type)))))
-			(function_type
-				(pattern
-					(pattern (value_identifier) type: (annex
-						module: (value_identifier)
-						name: (type_identifier)))
-					(pattern (value_identifier) type: (type_identifier))
-					(pattern (value_identifier)
-						type: (function_type
-							(pattern type: (annex
-								module: (value_identifier)
-								name: (type_identifier)) type: (type_identifier)
-								type: (array_type
-									size: (annotated value: (value_identifier) type: (value_identifier))
-									type: (extraction (type_identifier) (value_identifier))))
-							(tuple (annex
-								module: (value_identifier)
-								name: (type_identifier)) (type_identifier))))
-					(pattern (value_identifier)
-						type: (array_type
-							size: (annotated value: (value_identifier) type: (value_identifier))
-							type: (tuple
-								(array_type
-									size: (extraction (type_identifier) (value_identifier))
-									type: (primitive_type))
-								(application
-									(annex
-										module: (value_identifier)
-										name: (type_identifier))
-									(tuple
-										(extraction (type_identifier) (value_identifier))
-										(extraction (type_identifier) (value_identifier))
-										(extraction (type_identifier) (value_identifier))))))))
-					(tuple
-						(annex
-							module: (value_identifier)
-							name: (type_identifier))
-						(application
-							(annex
-								module: (value_identifier)
-								name: (type_identifier))
-							(tuple
-								(value_identifier)
-								(type_identifier)
-								(type_identifier))))))
-		normalizer: (value_identifier)))
-
+  (axm
+    (identifier)
+    (pi
+      (implicit
+        (group
+          (identifier)
+          (identifier)
+          (primitive)))
+      (pi
+        (sigma
+          (application
+            (path
+              (identifier)
+              (identifier))
+            (path
+              (identifier)))
+          (application
+            (primitive)
+            (path
+              (identifier))))
+        (sigma
+          (application
+            (path
+              (identifier)
+              (identifier))
+            (path
+              (identifier)))
+          (application
+            (primitive)
+            (path
+              (identifier))))))
+    (identifier)))

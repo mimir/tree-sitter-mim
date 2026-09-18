@@ -1,269 +1,318 @@
 =====
-annotated
+path
 =====
 
-let x = 3: Idx 4;
+let x = core.nat.add;
 
 ---
 
 (source_file
-	(let
-		(pattern
-			(value_identifier))
-		value: (annotated
-			value: (int_literal)
-			type: (primitive_type (int_literal)))))
+  (let
+    (identifier)
+    (path
+      (identifier)
+      (identifier)
+      (identifier))))
 
 =====
 application
 =====
 
-let x = foo bar 0;
+let x = f a b;
 
 ---
 
 (source_file
-	(let
-		(pattern
-			(value_identifier))
-		value: (application
-			(application
-				(value_identifier)
-				(value_identifier))
-			(int_literal))))
+  (let
+    (identifier)
+    (application
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
 
 =====
-explicit application
+implicit application
 =====
 
-let x = foo @ bar 0;
+let x = f @T a;
 
 ---
 
 (source_file
-	(let
-		(pattern
-			(value_identifier))
-		value: (application
-			(value_identifier)
-			(application
-				(value_identifier)
-				(int_literal)))))
+  (let
+    (identifier)
+    (application
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
 
 =====
-extraction
+tuple
 =====
 
-let x = (0, 0)#foo 2;
+let x = (23, 42, 66);
 
 ---
 
 (source_file
-	(let
-		(pattern
-			(value_identifier))
-		value: (application
-			(extraction
-				(tuple (int_literal) (int_literal)) (value_identifier))
-				(int_literal))))
+  (let
+    (identifier)
+    (tuple
+      (nat_literal)
+      (nat_literal)
+      (nat_literal))))
 
 =====
-where
+one tuple groups
 =====
-let x = a b
-	where
-		con a() = c d
-	end;
+
+let x = 0:(Idx s);
 
 ---
 
 (source_file
-	(let
-		(pattern
-			(value_identifier))
-		value: (where
-			(application
-				(value_identifier)
-				(value_identifier))
-			(lam
-				name: (value_identifier)
-				(pattern)
-				value: (application
-					(value_identifier)
-					(value_identifier))))))
+  (let
+    (identifier)
+    (annotated
+      (nat_literal)
+      (tuple
+        (application
+          (primitive)
+          (path
+            (identifier)))))))
 
 =====
-nested where
+extract
 =====
 
-con seq () =
-    0
-    where
-        con head () =
-            let cond =  %core.ncmp.l (i, n);
-			()
-            where
-                con t() = t
-            end;
-    end;
+let x = t#i#j;
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		(pattern)
-		value: (where
-			(int_literal)
-			(lam
-				name: (value_identifier)
-				(pattern)
-				value: (where
-					(let
-						(pattern (value_identifier))
-						value: (application
-							(annex
-								module: (value_identifier)
-								name: (value_identifier)
-								subtag: (value_identifier))
-							(tuple (value_identifier) (value_identifier))))
-					(tuple)
-					(lam
-						name: (value_identifier)
-						(pattern)
-						value: (value_identifier)))))))
+  (let
+    (identifier)
+    (extract
+      (extract
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
 
 =====
-fib_seq nested where
+extract by field name
 =====
 
-con seq {A: Nat} =
-    head(0, acc)
-    where
-        con head (i: Nat, acc: A) =
-            let cond = %core.ncmp.l;
-            (f, t)#cond ()
-            where
-                con t() = t
-                con f() = exit acc;
-            end;
-    end;
+let x = s#field;
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		(pattern
-			(pattern (type_identifier) type: (primitive_type)))
-		value: (where
-			(application
-				(value_identifier)
-				(tuple (int_literal) (value_identifier)))
-			(lam
-				name: (value_identifier)
-				(pattern
-					(pattern (value_identifier) type: (primitive_type))
-					(pattern (value_identifier) type: (type_identifier)))
-				value: (where
-					(let
-						(pattern (value_identifier))
-						value: (annex
-							module: (value_identifier)
-							name: (value_identifier)
-							subtag: (value_identifier)))
-					(application
-						(extraction
-							(tuple (value_identifier) (value_identifier))
-							(value_identifier))
-						(tuple))
-					(lam
-						name: (value_identifier)
-						(pattern)
-						value: (value_identifier))
-					(lam
-						name: (value_identifier)
-						(pattern)
-						value: (application
-							(value_identifier)
-							(value_identifier))))))))
+  (let
+    (identifier)
+    (extract
+      (path
+        (identifier))
+      (path
+        (identifier)))))
 
 =====
-nested where 2
+insert
 =====
 
-con seq {A: Nat} =
-	_
-	where
-		con t() = t
-		where
-			con blub() = _;
-		end
-		con f() = exit acc;
-	end;
+let x = t#i#j ← v;
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		(pattern
-			(pattern (type_identifier) type: (primitive_type)))
-		value: (where
-			(value_identifier)
-			(lam
-				name: (value_identifier)
-				(pattern)
-				value: (where
-					(value_identifier)
-					(lam
-						name: (value_identifier)
-						(pattern)
-						value: (value_identifier))))
-			(lam
-				name: (value_identifier)
-				(pattern)
-				value: (application
-					(value_identifier)
-					(value_identifier))))))
+  (let
+    (identifier)
+    (insert
+      (extract
+        (extract
+          (path
+            (identifier))
+          (path
+            (identifier)))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
 
 =====
-no semicolon
+ascii insert
 =====
 
-con t = t
-where
-    con blub() = _;
-end
-con f = exit;
+let x = t#i <- v;
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		value: (where
-			(value_identifier)
-			(lam
-				name: (value_identifier)
-				(pattern)
-				value: (value_identifier))))
-	(lam
-		name: (value_identifier)
-		value: (value_identifier)))
+  (let
+    (identifier)
+    (insert
+      (extract
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
 
 =====
-annex float lit
+mul binds tighter than add
 =====
 
-con continue = %core.nat.add;
+let x = a + b * c;
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		value: (annex
-			module: (value_identifier)
-			name: (value_identifier)
-			subtag: (value_identifier))))
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (binary_expression
+        (path
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
+shift binds tighter than mul
+=====
+
+let x = a << b * c;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (binary_expression
+      (binary_expression
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
+
+=====
+comparison operators
+=====
+
+let a = x == y;
+let b = x != y;
+let c = x < y;
+let d = x <= y;
+let e = x > y;
+let f = x >= y;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier))))
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier))))
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier))))
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier))))
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier))))
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier)))))
+
+=====
+star is the multiplication operator
+=====
+
+let x = f * g;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (path
+        (identifier)))))
+
+=====
+a sign after an expression is the infix operator
+=====
+
+let x = f -23;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (binary_expression
+      (path
+        (identifier))
+      (nat_literal))))
+
+=====
+where block
+=====
+
+let x = y where let y = 1; end;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (where
+      (path
+        (identifier))
+      (let
+        (identifier)
+        (nat_literal)))))

@@ -1,14 +1,300 @@
 =====
-fun with filter
+lambda expression
 =====
 
-fun with_filter x@tt = return 0;
+let f = λ (T: *) ((x y: T), return: T → ⊥)@ff: ⊥ = return x;
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		(pattern (value_identifier))
-		(filter (bool_literal))
-		value: (application (int_literal))))
+  (let
+    (identifier)
+    (lambda
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (star))))
+      (domain
+        (tuple_pattern
+          (tuple_pattern
+            (group
+              (identifier)
+              (identifier)
+              (path
+                (identifier))))
+          (typed_binder
+            (identifier)
+            (pi
+              (path
+                (identifier))
+              (bot))))
+        (filter
+          (primitive)))
+      (bot)
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
+ascii lambda expression
+=====
+
+let f = lm (T: *) (x: T): T = x;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (lambda
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (star))))
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (path
+              (identifier)))))
+      (path
+        (identifier))
+      (path
+        (identifier)))))
+
+=====
+continuation expression
+=====
+
+let f = cn (T: *) ((x y: T), return: Cn T) = return x;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (lambda
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (star))))
+      (domain
+        (tuple_pattern
+          (tuple_pattern
+            (group
+              (identifier)
+              (identifier)
+              (path
+                (identifier))))
+          (typed_binder
+            (identifier)
+            (cn_type
+              (path
+                (identifier))))))
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
+returning continuation expression
+=====
+
+let f = fn (T: *) (x y: T): T = return x;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (lambda
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (star))))
+      (domain
+        (tuple_pattern
+          (group
+            (identifier)
+            (identifier)
+            (path
+              (identifier)))))
+      (path
+        (identifier))
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
+continuation type
+=====
+
+let t = Cn [[T, T], Cn T];
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (cn_type
+      (sigma
+        (sigma
+          (path
+            (identifier))
+          (path
+            (identifier)))
+        (cn_type
+          (path
+            (identifier)))))))
+
+=====
+returning continuation type
+=====
+
+let t = Fn [T, T] → T;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (fn_type
+      (sigma
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
+
+=====
+ret expression
+=====
+
+con main (mem: M, return: Cn [M, I32]) =
+    ret (m, p1) = mem.slot («15; I8», 0) $ mem;
+    return (m, 0I32);
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (path
+            (identifier)))
+        (typed_binder
+          (identifier)
+          (cn_type
+            (sigma
+              (path
+                (identifier))
+              (primitive))))))
+    (ret
+      (tuple_pattern
+        (identifier)
+        (identifier))
+      (application
+        (path
+          (identifier)
+          (identifier))
+        (tuple
+          (array
+            (shape
+              (arity
+                (nat_literal)))
+            (primitive))
+          (nat_literal)))
+      (path
+        (identifier))
+      (application
+        (path
+          (identifier))
+        (tuple
+          (path
+            (identifier))
+          (idx_literal))))))
+
+=====
+declaration expression
+=====
+
+let f = cn (x: Nat) =
+    let y = x;
+    let z = y;
+    z;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (lambda
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (primitive))))
+      (decl_expr
+        (let
+          (identifier)
+          (path
+            (identifier)))
+        (decl_expr
+          (let
+            (identifier)
+            (path
+              (identifier)))
+          (path
+            (identifier)))))))
+
+=====
+match expression
+=====
+
+let m = match x with | A => 1 | B => 2;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (match
+      (path
+        (identifier))
+      (match_arm
+        (identifier)
+        (nat_literal))
+      (match_arm
+        (identifier)
+        (nat_literal)))))
+
+=====
+match expression with a leading bar omitted
+=====
+
+let m = match x with A => 1;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (match
+      (path
+        (identifier))
+      (match_arm
+        (identifier)
+        (nat_literal)))))

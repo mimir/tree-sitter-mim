@@ -1,138 +1,318 @@
 =====
-nat type
+kinds
 =====
 
-let x: Nat = 0;
+let a = Univ;
+let b = Type 0;
+let c = *;
+let d = ★;
+let e = □;
 
 ---
 
 (source_file
-	(let (pattern (value_identifier) type: (primitive_type)) value: (int_literal)))
+  (let
+    (identifier)
+    (primitive))
+  (let
+    (identifier)
+    (type
+      (nat_literal)))
+  (let
+    (identifier)
+    (star))
+  (let
+    (identifier)
+    (star))
+  (let
+    (identifier)
+    (primitive)))
 
 =====
-nat type bin
+builtin types
 =====
 
-let x: Nat = 0b1011;
+let a = Nat;
+let b = Idx;
+let c = Bool;
+let d = I32;
+let e = i64;
 
 ---
 
 (source_file
-	(let (pattern (value_identifier) type: (primitive_type)) value: (int_literal)))
+  (let
+    (identifier)
+    (primitive))
+  (let
+    (identifier)
+    (primitive))
+  (let
+    (identifier)
+    (primitive))
+  (let
+    (identifier)
+    (primitive))
+  (let
+    (identifier)
+    (primitive)))
 
 =====
-nat type nex
+rule type
 =====
 
-let x: Nat = 0xaff0;
+let r = Rule Nat;
 
 ---
 
 (source_file
-	(let (pattern (value_identifier) type: (primitive_type)) value: (int_literal)))
+  (let
+    (identifier)
+    (rule_type
+      (primitive))))
 
 =====
-idx type
+arrow type
 =====
 
-let x: Idx 8 = 0;
-
-=====
-function type
-=====
-
-let x: Nat -> Nat = 0;
+let t = Nat → Bool;
 
 ---
 
 (source_file
-	(let
-		(pattern (value_identifier)
-			type: (function_type (primitive_type) (primitive_type)))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (pi
+      (primitive)
+      (primitive))))
 
 =====
-array type
+ascii arrow type
 =====
 
-let x: <<2; Nat>> = 0;
+let t = Nat -> Bool;
 
 ---
 
 (source_file
-	(let
-		(pattern
-			(value_identifier)
-			type: (array_type size: (int_literal) type: (primitive_type)))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (pi
+      (primitive)
+      (primitive))))
 
 =====
-function array type
+arrow is right associative
 =====
 
-let x: <<2; Nat>> -> «3; Bool» = 0;
+let t = A → B → C;
 
 ---
 
 (source_file
-	(let
-		(pattern (value_identifier)
-			type: (function_type
-				(array_type size: (int_literal) type: (primitive_type))
-				(array_type size: (int_literal) type: (primitive_type))))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (pi
+      (path
+        (identifier))
+      (pi
+        (path
+          (identifier))
+        (path
+          (identifier))))))
 
 =====
-nested function type
+dependent function type
 =====
 
-let x: Nat -> Idx 8 -> * = 0;
+let t = [T: *] → T;
 
 ---
 
 (source_file
-	(let
-		(pattern (value_identifier)
-			type: (function_type
-				(primitive_type)
-				(function_type
-					(primitive_type
-						(int_literal))
-					(primitive_type))))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (pi
+      (sigma
+        (typed_binder
+          (identifier)
+          (star)))
+      (path
+        (identifier)))))
 
 =====
-dependent type
+implicit domain
 =====
 
-let x: [s: Nat] -> Idx s = 0;
+let t = {T: *} → T;
 
 ---
 
 (source_file
-	(let
-		(pattern (value_identifier)
-			type: (function_type
-				(pattern (pattern (value_identifier) type: (primitive_type)))
-				(primitive_type (value_identifier))))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (pi
+      (implicit
+        (typed_binder
+          (identifier)
+          (star)))
+      (path
+        (identifier)))))
 
 =====
-declaration in codomain
+named domain
 =====
 
-let x: [R: Ring] -> let a = 3; <<a; Nat>> = 0;
+let t = [A, B] as p → C;
 
 ---
 
 (source_file
-	(let
-		(pattern (value_identifier)
-			type: (function_type
-				(pattern (pattern (type_identifier) type: (type_identifier)))
-				(where
-					(let (pattern (value_identifier)) value: (int_literal))
-					(array_type
-						size: (value_identifier)
-						type: (primitive_type)))))
-		value: (int_literal)))
+  (let
+    (identifier)
+    (pi
+      (alias_telescope
+        (sigma
+          (path
+            (identifier))
+          (path
+            (identifier)))
+        (identifier))
+      (path
+        (identifier)))))
+
+=====
+sigma
+=====
+
+let t = [n: Nat, «n; Nat»];
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (sigma
+      (typed_binder
+        (identifier)
+        (primitive))
+      (array
+        (shape
+          (arity
+            (path
+              (identifier))))
+        (primitive)))))
+
+=====
+array
+=====
+
+let t = «2; Nat»;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (array
+      (shape
+        (arity
+          (nat_literal)))
+      (primitive))))
+
+=====
+array with a named shape
+=====
+
+let t = «i: n, j: s#i; body»;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (array
+      (shape
+        (arity
+          (typed_binder
+            (identifier)
+            (path
+              (identifier))))
+        (arity
+          (typed_binder
+            (identifier)
+            (extract
+              (path
+                (identifier))
+              (path
+                (identifier))))))
+      (path
+        (identifier)))))
+
+=====
+pack
+=====
+
+let t = ‹3; 0›;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (pack
+      (shape
+        (arity
+          (nat_literal)))
+      (nat_literal))))
+
+=====
+singleton type
+=====
+
+let t = ⦃ Nat ⦄;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (uniq
+      (primitive))))
+
+=====
+union type
+=====
+
+let t = A ∪ B;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (union
+      (path
+        (identifier))
+      (path
+        (identifier)))))
+
+=====
+injection
+=====
+
+let t = x inj A ∪ B;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (injection
+      (path
+        (identifier))
+      (union
+        (path
+          (identifier))
+        (path
+          (identifier))))))

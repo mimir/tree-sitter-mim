@@ -1,87 +1,300 @@
 =====
-minus lam rhs
+lambda declaration
 =====
 
-lam %core.minus: Idx s = (0:(Idx s), a);
+lam f (T: *) ((x y: T), return: T → ⊥)@ff: ⊥ = return x;
 
 ---
 
 (source_file
-	(lam
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		type: (primitive_type (value_identifier))
-		value:
-			(tuple
-				(annotated
-					value: (int_literal)
-					type: (tuple (primitive_type (value_identifier))))
-				(value_identifier))))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (star))))
+    (domain
+      (tuple_pattern
+        (tuple_pattern
+          (group
+            (identifier)
+            (identifier)
+            (path
+              (identifier))))
+        (typed_binder
+          (identifier)
+          (pi
+            (path
+              (identifier))
+            (bot))))
+      (filter
+        (primitive)))
+    (bot)
+    (application
+      (path
+        (identifier))
+      (path
+        (identifier)))))
 
 =====
-lam paren
+continuation declaration
 =====
 
-lam %core.minus (s: Nat) (a: Idx s): Idx s = 0;
+con f (T: *) ((x y: T), return: Cn T) = return x;
 
 ---
 
 (source_file
-	(lam
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		(pattern (pattern (value_identifier) type: (primitive_type)))
-		(pattern (pattern (value_identifier) type: (primitive_type (value_identifier))))
-		type: (primitive_type (value_identifier))
-		value: (int_literal)))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (star))))
+    (domain
+      (tuple_pattern
+        (tuple_pattern
+          (group
+            (identifier)
+            (identifier)
+            (path
+              (identifier))))
+        (typed_binder
+          (identifier)
+          (cn_type
+            (path
+              (identifier))))))
+    (application
+      (path
+        (identifier))
+      (path
+        (identifier)))))
 
 =====
-lam bracket
+returning continuation declaration
 =====
 
-lam %core.minus [s: Nat]: Idx s = 0;
+fun f (T: *) (x y: T): T = return x;
 
 ---
 
 (source_file
-	(lam
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		(pattern (pattern (value_identifier) type: (primitive_type)))
-		type: (primitive_type (value_identifier))
-		value: (int_literal)))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (star))))
+    (domain
+      (tuple_pattern
+        (group
+          (identifier)
+          (identifier)
+          (path
+            (identifier)))))
+    (path
+      (identifier))
+    (application
+      (path
+        (identifier))
+      (path
+        (identifier)))))
 
 =====
-lam brace
+multiple paren domains
 =====
 
-lam %core.minus {s: Nat} (a: Idx s): Idx s = 0;
+con foo (n: Nat) (m: Nat) = ();
 
 ---
 
 (source_file
-	(lam
-		name: (annex
-			module: (value_identifier)
-			name: (value_identifier))
-		(pattern (pattern (value_identifier) type: (primitive_type)))
-		(pattern (pattern (value_identifier) type: (primitive_type (value_identifier))))
-		type: (primitive_type (value_identifier))
-		value: (int_literal)))
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (tuple)))
 
 =====
-1-tuple expression
+implicit domain
 =====
 
-lam foo: Nat = (3);
+con foo {A: *} = ();
 
 ---
 
 (source_file
-	(lam
-		name: (value_identifier)
-		type: (primitive_type)
-		value: (tuple (int_literal))))
+  (lam
+    (identifier)
+    (domain
+      (implicit
+        (typed_binder
+          (identifier)
+          (star))))
+    (tuple)))
+
+=====
+bracketed domain
+=====
+
+lam foo [[Nat] → Nat] = 0;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (sigma
+        (pi
+          (sigma
+            (primitive))
+          (primitive))))
+    (nat_literal)))
+
+=====
+extern forward declaration
+=====
+
+extern con fwd [Nat, I32];
+
+---
+
+(source_file
+  (lam
+    (modifier)
+    (identifier)
+    (domain
+      (sigma
+        (primitive)
+        (primitive)))))
+
+=====
+annex lambda declaration
+=====
+
+anx lam minus (m: Nat) {s: Nat} (a: Idx s): Idx s = wrap.sub m (0:(Idx s), a);
+
+---
+
+(source_file
+  (lam
+    (modifier)
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (domain
+      (implicit
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (application
+            (primitive)
+            (path
+              (identifier))))))
+    (application
+      (primitive)
+      (path
+        (identifier)))
+    (application
+      (application
+        (path
+          (identifier)
+          (identifier))
+        (path
+          (identifier)))
+      (tuple
+        (annotated
+          (nat_literal)
+          (tuple
+            (application
+              (primitive)
+              (path
+                (identifier)))))
+        (path
+          (identifier))))))
+
+=====
+and chain
+=====
+
+lam f (x: Nat): Nat = g x
+and lam g (x: Nat): Nat = f x;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (primitive)
+    (application
+      (path
+        (identifier))
+      (path
+        (identifier)))
+    (and
+      (identifier)
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (primitive))))
+      (primitive)
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
+where block
+=====
+
+con t () = body
+    where
+        con body (acc: A) = head;
+    end;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern))
+    (where
+      (path
+        (identifier))
+      (lam
+        (identifier)
+        (domain
+          (tuple_pattern
+            (typed_binder
+              (identifier)
+              (path
+                (identifier)))))
+        (path
+          (identifier))))))
