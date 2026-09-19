@@ -43,6 +43,17 @@ function commaSep(rule) {
   return optional(commaSep1(rule));
 }
 
+/** An `import`/`plugin` declaration; the two differ only in `keyword`. */
+function dependency($, keyword) {
+  return seq(
+    repeat($.modifier),
+    keyword,
+    field("name", choice($.identifier, $.string_literal)),
+    optional($._as_clause),
+    ";",
+  );
+}
+
 module.exports = grammar({
   name: "mim",
 
@@ -103,21 +114,9 @@ module.exports = grammar({
 
     _as_clause: $ => seq("as", field("alias", choice($.identifier, "*"))),
 
-    import: $ => seq(
-      repeat($.modifier),
-      "import",
-      field("name", choice($.identifier, $.string_literal)),
-      optional($._as_clause),
-      ";",
-    ),
-
-    plugin: $ => seq(
-      repeat($.modifier),
-      "plugin",
-      field("name", $.identifier),
-      optional($._as_clause),
-      ";",
-    ),
+    // `import` and `plugin` differ only in the keyword: both take a module name or a file name.
+    import: $ => dependency($, "import"),
+    plugin: $ => dependency($, "plugin"),
 
     use: $ => seq(
       repeat($.modifier),
@@ -506,7 +505,7 @@ module.exports = grammar({
       "›",
     ),
 
-    shape: $ => seq($.arity, repeat(seq(",", $.arity))),
+    shape: $ => commaSep1($.arity),
 
     arity: $ => choice($.typed_binder, $.expression),
 

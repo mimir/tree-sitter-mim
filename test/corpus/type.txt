@@ -250,6 +250,25 @@ let t = «i: n, j: s#i; body»;
         (identifier)))))
 
 =====
+shape with a trailing comma
+=====
+
+let t = «2, 3,; Nat»;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (array
+      (shape
+        (arity
+          (nat_literal))
+        (arity
+          (nat_literal)))
+      (primitive))))
+
+=====
 pack
 =====
 

@@ -24,6 +24,18 @@ pub plugin core as *;
     (identifier)))
 
 =====
+plugin by file name
+=====
+
+plugin "some/dir/foo";
+
+---
+
+(source_file
+  (plugin
+    (string_literal)))
+
+=====
 import by name
 =====
 
