@@ -11,32 +11,36 @@ This will be moved to a plugin once plugin support lands in helix master.
 
 A VSCode plugin is available [here](https://marketplace.visualstudio.com/items?itemName=MimIRExtensions.tree-sitter-mim-vscode)
 
-
 ### Neovim
 
 Neovim does not know about Mim yet, so `nvim-treesitter` (branch `main`) has to be told about this
 repository.  Unlike Helix, Neovim uses the queries in [`queries/`](queries) - capture names differ
 between the two editors, so the Helix queries linked above will *not* work here.
 
+[vim-mim](https://github.com/mimir/vim-mim) already does step 1 for you and adds what a grammar
+cannot provide - filetype detection, comment settings, and abbreviations for the Unicode terminals -
+plus a regex syntax file that Neovim falls back to whenever the parser is missing.  With it installed,
+only step 2 is left.
+
 1. Add the following to your `init.lua`:
 
-```lua
-vim.filetype.add({
-    extension = { mim = "mim" },
-})
+  ```lua
+  vim.filetype.add({
+      extension = { mim = "mim" },
+  })
 
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TSUpdate",
-    callback = function()
-        require("nvim-treesitter.parsers").mim = {
-            install_info = {
-                url = "https://github.com/mimir/tree-sitter-mim",
-                queries = "queries",
-            },
-        }
-    end,
-})
-```
+  vim.api.nvim_create_autocmd("User", {
+      pattern = "TSUpdate",
+      callback = function()
+          require("nvim-treesitter.parsers").mim = {
+              install_info = {
+                  url = "https://github.com/mimir/tree-sitter-mim",
+                  queries = "queries",
+              },
+          }
+      end,
+  })
+  ```
 
 2. Run `:TSInstall mim` inside of Neovim.  This downloads the repository, compiles `src/parser.c` and
    installs `queries/`.  `:TSUpdate mim` pulls a newer version later on.
@@ -44,14 +48,14 @@ vim.api.nvim_create_autocmd("User", {
 3. `nvim-treesitter` `main` does not enable highlighting by itself.  Distributions such as LazyVim do
    it for you; otherwise add
 
-```lua
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "mim",
-    callback = function()
-        vim.treesitter.start()
-    end,
-})
-```
+  ```lua
+  vim.api.nvim_create_autocmd("FileType", {
+      pattern = "mim",
+      callback = function()
+          vim.treesitter.start()
+      end,
+  })
+  ```
 
 #### Working on the grammar
 
