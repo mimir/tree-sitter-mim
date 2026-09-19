@@ -1,2 +1,3 @@
 tree-sitter-mim.wasm
 test/plugins
+*.so

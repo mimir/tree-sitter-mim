@@ -127,6 +127,15 @@ state — keep it that way unless a real need arises.
 
 ## Syntax-highlighting queries
 
-There is no `queries/` directory in this repo. The `.scm` query files live in the Helix fork linked from
-README.md and are copied in by users (see the Neovim instructions there). Renaming a grammar node is a
-breaking change for those external queries.
+`queries/` holds the **Neovim** queries (`highlights.scm`, `injections.scm`, `folds.scm`); `nvim-treesitter`
+symlinks that directory into its parser dir, so edits are live. Capture names follow nvim-treesitter's
+`CONTRIBUTING.md` - they are *not* interchangeable with Helix's, whose `.scm` files live in the fork linked
+from README.md. Validate with `ts_query_ls check -f queries/` (config in `.tsqueryrc.json`; needs
+`tree-sitter build` first) and format with `ts_query_ls format queries/`.
+
+Ordering rule that bit once: when two patterns capture *nested* nodes covering the same text, the inner node
+wins regardless of pattern order - that is why `anx` is captured as `(anx "anx" @keyword)` rather than as a
+bare token, which would otherwise override `(modifier) @keyword.modifier`. Among patterns matching the *same*
+node, the later one wins.
+
+Renaming a grammar node breaks these queries and the external Helix ones.
