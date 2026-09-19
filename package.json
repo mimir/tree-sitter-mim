@@ -2,7 +2,7 @@
   "name": "tree-sitter-mim",
   "version": "0.1.0",
   "description": "Tree-sitter grammar for Mim, the front-end language of MimIR",
-  "repository": "https://gitlab.com/amaebe/dotfiles",
+  "repository": "https://github.com/mimir/tree-sitter-mim",
   "license": "MIT",
   "author": {
     "name": "Manuel Lata",

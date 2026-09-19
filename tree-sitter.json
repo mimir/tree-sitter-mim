@@ -24,7 +24,7 @@
       }
     ],
     "links": {
-      "repository": "https://gitlab.com/amaebe/dotfiles"
+      "repository": "https://github.com/mimir/tree-sitter-mim"
     }
   },
   "bindings": {
