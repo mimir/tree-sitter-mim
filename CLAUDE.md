@@ -114,7 +114,15 @@ these decisions stay shift/reduce rather than reduce/reduce.
 - `identifier` is also the escape hatch `` `op `` (`` `+ ``, `` `<= ``, …), since that is what an infix
   operator desugars to. It stays the `word` token for keyword extraction.
 - Literals carry no sign at token level. `nat_literal` covers bin/oct/dec/hex; `idx_literal` is
-  `23₂`/`23_2`/`23i32`; the hex float patterns need their `0x` prefix or they swallow nat literals.
+  `23₂`/`23_2`/`23i32`; `float_literal` covers the decimal and the hexadecimal spellings.
+- A literal is **not** a single token. Its marker parts are split off so highlighting can set them
+  apart from the digits: `base_prefix` (`0x`/`0b`/`0o`), `idx_suffix` (`₂`/`_2`/`i32`) and
+  `exponent` (`e10`/`p-3`); an `idx_literal` even nests the whole `nat_literal` as its value. The
+  digit tokens themselves stay hidden. Every part after the first is `token.immediate`, which is
+  what keeps the pieces glued together — `23 i32` is still an application, not a literal — and each
+  prefix is paired with a digit token of its own base, so `0b19` remains no literal. `idx_suffix`
+  needs its `prec(1)`: `i32` and `_2` are spelled exactly like the `i32` primitive and an
+  identifier, and without it the tie on match length goes the wrong way.
 - A declaration may be followed by `;` and stray semicolons are skipped, so declaration lists are
   `repeat(choice($.declaration, ";"))`.
 

@@ -107,7 +107,8 @@ pub mod mode {
     (let
       (modifier)
       (identifier)
-      (nat_literal))
+      (nat_literal
+        (base_prefix)))
     (anx
       (identifier)
       (path

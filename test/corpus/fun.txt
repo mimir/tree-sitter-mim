@@ -225,7 +225,9 @@ con main (mem: M, return: Cn [M, I32]) =
         (tuple
           (path
             (identifier))
-          (idx_literal))))))
+          (idx_literal
+            (nat_literal)
+            (idx_suffix)))))))
 
 =====
 declaration expression

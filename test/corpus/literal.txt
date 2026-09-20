@@ -7,6 +7,9 @@ let b = 0b1010;
 let c = 0o777;
 let d = 0xDeadBeef;
 
+// a blank breaks the prefix off again
+let e = 0 x1;
+
 ---
 
 (source_file
@@ -15,13 +18,23 @@ let d = 0xDeadBeef;
     (nat_literal))
   (let
     (identifier)
-    (nat_literal))
+    (nat_literal
+      (base_prefix)))
   (let
     (identifier)
-    (nat_literal))
+    (nat_literal
+      (base_prefix)))
   (let
     (identifier)
-    (nat_literal)))
+    (nat_literal
+      (base_prefix)))
+  (line_comment)
+  (let
+    (identifier)
+    (application
+      (nat_literal)
+      (path
+        (identifier)))))
 
 =====
 idx literals
@@ -30,19 +43,47 @@ idx literals
 let a = 1₂;
 let b = 1_2;
 let c = 23I32;
+let d = 0xffi8;
+let e = 0b1010i32;
+// the size has to be glued to the value; with a blank it is an application
+let f = 23 i32;
 
 ---
 
 (source_file
   (let
     (identifier)
-    (idx_literal))
+    (idx_literal
+      (nat_literal)
+      (idx_suffix)))
   (let
     (identifier)
-    (idx_literal))
+    (idx_literal
+      (nat_literal)
+      (idx_suffix)))
   (let
     (identifier)
-    (idx_literal)))
+    (idx_literal
+      (nat_literal)
+      (idx_suffix)))
+  (let
+    (identifier)
+    (idx_literal
+      (nat_literal
+        (base_prefix))
+      (idx_suffix)))
+  (let
+    (identifier)
+    (idx_literal
+      (nat_literal
+        (base_prefix))
+      (idx_suffix)))
+  (line_comment)
+  (let
+    (identifier)
+    (application
+      (nat_literal)
+      (primitive))))
 
 =====
 float literals
@@ -54,6 +95,8 @@ let c = .5;
 let d = 1e10;
 let e = 1.5e-3;
 let f = 0x1.8p3;
+let g = 0x1fp3;
+let h = 0x.8p+3;
 
 ---
 
@@ -69,13 +112,27 @@ let f = 0x1.8p3;
     (float_literal))
   (let
     (identifier)
-    (float_literal))
+    (float_literal
+      (exponent)))
   (let
     (identifier)
-    (float_literal))
+    (float_literal
+      (exponent)))
   (let
     (identifier)
-    (float_literal)))
+    (float_literal
+      (base_prefix)
+      (exponent)))
+  (let
+    (identifier)
+    (float_literal
+      (base_prefix)
+      (exponent)))
+  (let
+    (identifier)
+    (float_literal
+      (base_prefix)
+      (exponent))))
 
 =====
 signed literals

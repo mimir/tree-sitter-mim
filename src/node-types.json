@@ -1288,6 +1288,32 @@
     }
   },
   {
+    "type": "float_literal",
+    "named": true,
+    "fields": {
+      "exponent": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "exponent",
+            "named": true
+          }
+        ]
+      },
+      "prefix": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "base_prefix",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "fn_type",
     "named": true,
     "fields": {
@@ -1441,6 +1467,32 @@
         "types": [
           {
             "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "idx_literal",
+    "named": true,
+    "fields": {
+      "suffix": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "idx_suffix",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "nat_literal",
             "named": true
           }
         ]
@@ -1814,6 +1866,22 @@
     "type": "modifier",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "nat_literal",
+    "named": true,
+    "fields": {
+      "prefix": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "base_prefix",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "pack",
@@ -2637,6 +2705,10 @@
     "named": false
   },
   {
+    "type": "base_prefix",
+    "named": true
+  },
+  {
     "type": "bot",
     "named": false
   },
@@ -2661,16 +2733,16 @@
     "named": false
   },
   {
+    "type": "exponent",
+    "named": true
+  },
+  {
     "type": "extern",
     "named": false
   },
   {
     "type": "ff",
     "named": false
-  },
-  {
-    "type": "float_literal",
-    "named": true
   },
   {
     "type": "fn",
@@ -2705,7 +2777,7 @@
     "named": true
   },
   {
-    "type": "idx_literal",
+    "type": "idx_suffix",
     "named": true
   },
   {
@@ -2740,10 +2812,6 @@
   {
     "type": "mod",
     "named": false
-  },
-  {
-    "type": "nat_literal",
-    "named": true
   },
   {
     "type": "norm",

@@ -11,7 +11,19 @@
 
 (idx_literal) @number
 
+; the size of an `Idx` literal is a type, and `23i32` spells it just like the `i32`
+; primitive does - so colour it the same, but keep it inside the number's range
+(idx_literal
+  suffix: (idx_suffix) @type.builtin)
+
 (float_literal) @number.float
+
+; the base prefix and the exponent are markers within the number, not digits - the nested
+; captures keep them inside the literal's range, so they read as one token still
+[
+  (base_prefix)
+  (exponent)
+] @punctuation.special
 
 (char_literal) @character
 

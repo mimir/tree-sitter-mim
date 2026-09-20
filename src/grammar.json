@@ -1843,83 +1843,307 @@
       }
     },
     "nat_literal": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "PATTERN",
-            "value": "0[bB][01]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "0[oO][0-7]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "0[xX][0-9a-fA-F]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "[0-9]+"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_dec_digits"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "prefix",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_bin_prefix"
+                },
+                "named": true,
+                "value": "base_prefix"
+              }
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_bin_digits"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "prefix",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_oct_prefix"
+                },
+                "named": true,
+                "value": "base_prefix"
+              }
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_oct_digits"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "prefix",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_hex_prefix"
+                },
+                "named": true,
+                "value": "base_prefix"
+              }
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_hex_digits"
+            }
+          ]
+        }
+      ]
     },
     "idx_literal": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "PATTERN",
-            "value": "[0-9]+[₀-₉]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "[0-9]+_[0-9]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "[0-9]+[iI][0-9]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "0[xX][0-9a-fA-F]+[iI][0-9]+"
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "nat_literal"
           }
-        ]
+        },
+        {
+          "type": "FIELD",
+          "name": "suffix",
+          "content": {
+            "type": "SYMBOL",
+            "name": "idx_suffix"
+          }
+        }
+      ]
+    },
+    "idx_suffix": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "[₀-₉]+"
+            },
+            {
+              "type": "PATTERN",
+              "value": "_[0-9]+"
+            },
+            {
+              "type": "PATTERN",
+              "value": "[iI][0-9]+"
+            }
+          ]
+        }
       }
     },
     "float_literal": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_dec_digits"
+            },
+            {
+              "type": "FIELD",
+              "name": "exponent",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_dec_exponent"
+                },
+                "named": true,
+                "value": "exponent"
+              }
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_dec_fraction"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "exponent",
+                  "content": {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_dec_exponent"
+                    },
+                    "named": true,
+                    "value": "exponent"
+                  }
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "prefix",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_hex_prefix"
+                },
+                "named": true,
+                "value": "base_prefix"
+              }
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_hex_digits"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_hex_fraction"
+                }
+              ]
+            },
+            {
+              "type": "FIELD",
+              "name": "exponent",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_hex_exponent"
+                },
+                "named": true,
+                "value": "exponent"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "_bin_prefix": {
+      "type": "PATTERN",
+      "value": "0[bB]"
+    },
+    "_oct_prefix": {
+      "type": "PATTERN",
+      "value": "0[oO]"
+    },
+    "_hex_prefix": {
+      "type": "PATTERN",
+      "value": "0[xX]"
+    },
+    "_bin_digits": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[01]+"
+      }
+    },
+    "_oct_digits": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[0-7]+"
+      }
+    },
+    "_hex_digits": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[0-9a-fA-F]+"
+      }
+    },
+    "_dec_digits": {
+      "type": "PATTERN",
+      "value": "[0-9]+"
+    },
+    "_dec_fraction": {
       "type": "TOKEN",
       "content": {
         "type": "CHOICE",
         "members": [
           {
             "type": "PATTERN",
-            "value": "[0-9]+[eE][+-]?[0-9]+"
+            "value": "[0-9]+\\.[0-9]*"
           },
           {
             "type": "PATTERN",
-            "value": "[0-9]+\\.[0-9]*([eE][+-]?[0-9]+)?"
-          },
-          {
-            "type": "PATTERN",
-            "value": "[0-9]*\\.[0-9]+([eE][+-]?[0-9]+)?"
-          },
-          {
-            "type": "PATTERN",
-            "value": "0[xX][0-9a-fA-F]+[pP][+-]?[0-9]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "0[xX][0-9a-fA-F]+\\.[0-9a-fA-F]*[pP][+-]?[0-9]+"
-          },
-          {
-            "type": "PATTERN",
-            "value": "0[xX][0-9a-fA-F]*\\.[0-9a-fA-F]+[pP][+-]?[0-9]+"
+            "value": "[0-9]*\\.[0-9]+"
           }
         ]
+      }
+    },
+    "_hex_fraction": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[0-9a-fA-F]+\\.[0-9a-fA-F]*"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[0-9a-fA-F]*\\.[0-9a-fA-F]+"
+          }
+        ]
+      }
+    },
+    "_dec_exponent": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[eE][+-]?[0-9]+"
+      }
+    },
+    "_hex_exponent": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[pP][+-]?[0-9]+"
       }
     },
     "string_literal": {

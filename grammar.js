@@ -408,29 +408,67 @@ module.exports = grammar({
       field("type", $._operand),
     )),
 
-    nat_literal: $ => token(choice(
-      /0[bB][01]+/,
-      /0[oO][0-7]+/,
-      /0[xX][0-9a-fA-F]+/,
-      /[0-9]+/,
-    )),
+    // The base prefix is split off as its own `base_prefix` token so highlighting can set the
+    // `0x` of `0xdeadbeef` apart from its digits; the digit tokens stay hidden and are paired
+    // with their prefix, so `0b19` is still no literal.
+    nat_literal: $ => choice(
+      $._dec_digits,
+      seq(field("prefix", alias($._bin_prefix, $.base_prefix)), $._bin_digits),
+      seq(field("prefix", alias($._oct_prefix, $.base_prefix)), $._oct_digits),
+      seq(field("prefix", alias($._hex_prefix, $.base_prefix)), $._hex_digits),
+    ),
 
     // `23₂`, `23_2`, `23i32` - a literal of type `Idx n`; the `iN` form spells a bit width.
-    idx_literal: $ => token(choice(
-      /[0-9]+[₀-₉]+/,
-      /[0-9]+_[0-9]+/,
-      /[0-9]+[iI][0-9]+/,
-      /0[xX][0-9a-fA-F]+[iI][0-9]+/,
+    // The size is split off as its own `idx_suffix` token so highlighting can set it apart from
+    // the value.  `token.immediate` keeps the two glued together - `23 i32` stays an application -
+    // and the `prec` makes the suffix beat the identically spelled `identifier` / `i32` primitive.
+    idx_literal: $ => seq(
+      field("value", $.nat_literal),
+      field("suffix", $.idx_suffix),
+    ),
+
+    idx_suffix: $ => token.immediate(prec(1, choice(
+      /[₀-₉]+/,
+      /_[0-9]+/,
+      /[iI][0-9]+/,
+    ))),
+
+    // Likewise for the exponent: `1.5e10` is mantissa + `exponent`.  A decimal float needs either
+    // a fraction or an exponent - plain digits are a `nat_literal` - and a hexadecimal one always
+    // needs its exponent, exactly as the reference lexer demands.
+    float_literal: $ => choice(
+      seq($._dec_digits, field("exponent", alias($._dec_exponent, $.exponent))),
+      seq($._dec_fraction, optional(field("exponent", alias($._dec_exponent, $.exponent)))),
+      seq(
+        field("prefix", alias($._hex_prefix, $.base_prefix)),
+        choice($._hex_digits, $._hex_fraction),
+        field("exponent", alias($._hex_exponent, $.exponent)),
+      ),
+    ),
+
+    // The pieces the two rules above are built from.  Everything that follows a prefix or a
+    // mantissa is `token.immediate`, so a blank always breaks the literal apart again.
+    _bin_prefix: $ => /0[bB]/,
+    _oct_prefix: $ => /0[oO]/,
+    _hex_prefix: $ => /0[xX]/,
+
+    _bin_digits: $ => token.immediate(/[01]+/),
+    _oct_digits: $ => token.immediate(/[0-7]+/),
+    _hex_digits: $ => token.immediate(/[0-9a-fA-F]+/),
+    _dec_digits: $ => /[0-9]+/,
+
+    _dec_fraction: $ => token(choice(
+      /[0-9]+\.[0-9]*/,
+      /[0-9]*\.[0-9]+/,
     )),
 
-    float_literal: $ => token(choice(
-      /[0-9]+[eE][+-]?[0-9]+/,
-      /[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?/,
-      /[0-9]*\.[0-9]+([eE][+-]?[0-9]+)?/,
-      /0[xX][0-9a-fA-F]+[pP][+-]?[0-9]+/,
-      /0[xX][0-9a-fA-F]+\.[0-9a-fA-F]*[pP][+-]?[0-9]+/,
-      /0[xX][0-9a-fA-F]*\.[0-9a-fA-F]+[pP][+-]?[0-9]+/,
+    _hex_fraction: $ => token.immediate(choice(
+      /[0-9a-fA-F]+\.[0-9a-fA-F]*/,
+      /[0-9a-fA-F]*\.[0-9a-fA-F]+/,
     )),
+
+    _dec_exponent: $ => token.immediate(/[eE][+-]?[0-9]+/),
+    _hex_exponent: $ => token.immediate(/[pP][+-]?[0-9]+/),
 
     string_literal: $ => /"(\\.|[^"\\])*"/,
 
