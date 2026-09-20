@@ -11,29 +11,19 @@
 
 (idx_literal) @number
 
+; the size of an `Idx` literal is a type, and `23i32` spells it just like the `i32`
+; primitive does - so colour it the same, but keep it inside the number's range
+(idx_literal
+  suffix: (idx_suffix) @type.builtin)
+
 (float_literal) @number.float
 
-; The prefix of `0xdeadbeef`, the size of `23i32` and the exponent of `1.5e10` are markers
-; within the number rather than digits, and hard to tell from them.  Each is captured under
-; its own literal's group, so an undefined group falls back to exactly that - the marker then
-; simply looks like the rest of the number.  Define the group with an *attribute only* and no
-; colour to set it apart without breaking the literal into two tokens:
-;
-;   vim.api.nvim_set_hl(0, "@number.suffix", { bold = true })
-;
-; Neovim combines an extmark that sets no foreground with the one below it, so the marker keeps
-; the number's colour and merely gains the attribute.  vim-mim ships these defaults.
-(nat_literal
-  prefix: (base_prefix) @number.prefix)
-
-(idx_literal
-  suffix: (idx_suffix) @number.suffix)
-
-(float_literal
-  prefix: (base_prefix) @number.float.prefix)
-
-(float_literal
-  exponent: (exponent) @number.float.exponent)
+; the base prefix and the exponent are markers within the number, not digits - the nested
+; captures keep them inside the literal's range, so they read as one token still
+[
+  (base_prefix)
+  (exponent)
+] @punctuation.special
 
 (char_literal) @character
 
@@ -111,6 +101,16 @@
   "tt"
   "ff"
 ] @boolean
+
+; so is `iN`, which is not a type at all: it is the literal 2^N, a `Nat`.  `IN` is the one that
+; names the type `Idx 2^N` and keeps the rule above.
+[
+  "i1"
+  "i8"
+  "i16"
+  "i32"
+  "i64"
+] @number
 
 ; ───── Operators ─────
 [

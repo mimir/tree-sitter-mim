@@ -146,15 +146,4 @@ wins regardless of pattern order - that is why `anx` is captured as `(anx "anx" 
 bare token, which would otherwise override `(modifier) @keyword.modifier`. Among patterns matching the *same*
 node, the later one wins.
 
-The literal markers (`base_prefix`, `idx_suffix`, `exponent`) deliberately use capture names that are
-*not* in nvim-treesitter's list: `@number.prefix`, `@number.suffix`, `@number.float.prefix` and
-`@number.float.exponent`. Each is parented on the group of the literal it sits in, so an undefined group
-falls back to exactly that and the marker simply looks like the rest of the number. Defining the group
-with an **attribute only and no colour** is what sets the marker apart without splitting the literal in
-two: Neovim's `hl_combine_attr` keeps the foreground of the extmark below whenever the one on top leaves
-it unset, so `{ bold = true }` yields the number's own colour in bold. `vim-mim`'s `plugin/mim.lua` ships
-those four as `default` highlights and re-applies them on `ColorScheme`, which `:hi clear` would drop.
-Colouring the size as `@type.builtin` was the obvious first idea and is wrong in practice - `23I32` then
-reads as two separate tokens.
-
 Renaming a grammar node breaks these queries and the external Helix ones.
