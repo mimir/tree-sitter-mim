@@ -200,6 +200,10 @@
         "named": true
       },
       {
+        "type": "single",
+        "named": true
+      },
+      {
         "type": "star",
         "named": true
       },
@@ -220,7 +224,11 @@
         "named": true
       },
       {
-        "type": "uniq",
+        "type": "unwrap",
+        "named": true
+      },
+      {
+        "type": "wrap",
         "named": true
       }
     ]
@@ -448,6 +456,10 @@
             "named": true
           },
           {
+            "type": "single",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -464,7 +476,7 @@
             "named": true
           },
           {
-            "type": "uniq",
+            "type": "wrap",
             "named": true
           }
         ]
@@ -626,6 +638,10 @@
             "named": true
           },
           {
+            "type": "single",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -642,7 +658,7 @@
             "named": true
           },
           {
-            "type": "uniq",
+            "type": "wrap",
             "named": true
           }
         ]
@@ -732,6 +748,10 @@
             "named": true
           },
           {
+            "type": "single",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -748,7 +768,7 @@
             "named": true
           },
           {
-            "type": "uniq",
+            "type": "wrap",
             "named": true
           }
         ]
@@ -1150,6 +1170,10 @@
             "named": true
           },
           {
+            "type": "single",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1166,7 +1190,7 @@
             "named": true
           },
           {
-            "type": "uniq",
+            "type": "wrap",
             "named": true
           }
         ]
@@ -1248,6 +1272,10 @@
             "named": true
           },
           {
+            "type": "single",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1264,7 +1292,7 @@
             "named": true
           },
           {
-            "type": "uniq",
+            "type": "wrap",
             "named": true
           }
         ]
@@ -1420,6 +1448,10 @@
             "named": true
           },
           {
+            "type": "single",
+            "named": true
+          },
+          {
             "type": "string_literal",
             "named": true
           },
@@ -1440,7 +1472,7 @@
             "named": true
           },
           {
-            "type": "uniq",
+            "type": "wrap",
             "named": true
           }
         ]
@@ -2266,6 +2298,22 @@
     }
   },
   {
+    "type": "single",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -2435,10 +2483,10 @@
     }
   },
   {
-    "type": "uniq",
+    "type": "unwrap",
     "named": true,
     "fields": {
-      "inhabitant": {
+      "operand": {
         "multiple": false,
         "required": true,
         "types": [
@@ -2514,6 +2562,22 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "wrap",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2927,14 +2991,6 @@
   },
   {
     "type": "★",
-    "named": false
-  },
-  {
-    "type": "⦃",
-    "named": false
-  },
-  {
-    "type": "⦄",
     "named": false
   }
 ]

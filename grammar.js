@@ -28,6 +28,8 @@ const PREC = {
   add: 90,
   mul: 100,
   shift: 110,
+  // The one prefix level: looser than application, tighter than every infix operator.
+  prefix: 115,
   app: 120,
   extract: 130,
   lit: 140,
@@ -303,11 +305,13 @@ module.exports = grammar({
 
     primary_expression: $ => choice(
       $._operand,
-      // `*` and a signed literal are the two primary expressions that may never stand as
-      // an application argument: after a complete expression, `*`, `+` and `-` are always
-      // the infix operators, so `f *` multiplies and `f -23` subtracts.
+      // `*`, a signed literal and a prefix `#` are the primary expressions that may never
+      // stand as an application argument: after a complete expression, `*`, `+`, `-` and `#`
+      // are always the infix operators, so `f *` multiplies, `f -23` subtracts and `f #x`
+      // extracts.
       $.star,
       $.signed,
+      $.unwrap,
     ),
 
     // A primary expression that may also stand as an application argument.
@@ -329,7 +333,8 @@ module.exports = grammar({
       $.fn_type,
       $.lambda,
       $.ret,
-      $.uniq,
+      $.single,
+      $.wrap,
       $.array,
       $.pack,
       $.sigma,
@@ -527,7 +532,10 @@ module.exports = grammar({
       field("body", $.expression),
     )),
 
-    uniq: $ => seq("⦃", field("inhabitant", $.expression), "⦄"),
+    // The `;` is what tells an array from a singleton type and a pack from a wrap.
+    single: $ => seq("«", field("body", $.expression), "»"),
+
+    wrap: $ => seq("‹", field("body", $.expression), "›"),
 
     array: $ => seq(
       "«",
@@ -577,6 +585,9 @@ module.exports = grammar({
 
     // An operand that binds at least as tightly as application.
     _app_expression: $ => choice($._atom, $.application),
+
+    // The prefix `#` eliminates a singleton; only an application and an extract reach into it.
+    unwrap: $ => prec.right(PREC.prefix, seq("#", field("operand", $.expression))),
 
     extract: $ => prec.left(PREC.extract, seq(
       field("aggregate", $._atom),

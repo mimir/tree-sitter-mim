@@ -289,15 +289,50 @@ let t = ‹3; 0›;
 singleton type
 =====
 
-let t = ⦃ Nat ⦄;
+let t = «Nat»;
 
 ---
 
 (source_file
   (let
     (identifier)
-    (uniq
+    (single
       (primitive))))
+
+=====
+singleton intro and elim
+=====
+
+let t = #‹23›;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (unwrap
+      (wrap
+        (nat_literal)))))
+
+=====
+prefix # is looser than application, tighter than +
+=====
+
+let t = #f x + 1;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (binary_expression
+      (unwrap
+        (application
+          (path
+            (identifier))
+          (path
+            (identifier))))
+      (nat_literal))))
 
 =====
 union type

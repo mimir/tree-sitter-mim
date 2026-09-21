@@ -145,8 +145,6 @@
   "»"
   "‹"
   "›"
-  "⦃"
-  "⦄"
 ] @punctuation.bracket
 
 [
