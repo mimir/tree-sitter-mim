@@ -370,3 +370,78 @@ let t = x inj A ∪ B;
           (identifier))
         (path
           (identifier))))))
+
+=====
+variant
+=====
+
+rec List = | Nil | Cons: [Nat, List];
+
+---
+
+(source_file
+  (rec
+    (identifier)
+    (variant
+      (variant_ctor
+        (identifier))
+      (variant_ctor
+        (identifier)
+        (sigma
+          (primitive)
+          (path
+            (identifier)))))))
+
+=====
+anonymous and empty variant
+=====
+
+lam f (x: | A | B: Nat) (y: |): Nat = 0;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (variant
+            (variant_ctor
+              (identifier))
+            (variant_ctor
+              (identifier)
+              (primitive))))))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (variant))))
+    (primitive)
+    (nat_literal)))
+
+=====
+match on a variant with payload patterns
+=====
+
+let n = match l with | Nil => 0 | Cons (h, _) => h;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (match
+      (path
+        (identifier))
+      (match_arm
+        (identifier)
+        (nat_literal))
+      (match_arm
+        (identifier)
+        (tuple_pattern
+          (identifier)
+          (identifier))
+        (path
+          (identifier))))))

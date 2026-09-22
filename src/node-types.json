@@ -228,6 +228,10 @@
         "named": true
       },
       {
+        "type": "variant",
+        "named": true
+      },
+      {
         "type": "wrap",
         "named": true
       }
@@ -1852,9 +1856,29 @@
           }
         ]
       },
+      "constructor": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "pattern": {
         "multiple": false,
-        "required": true,
+        "required": false,
+        "types": [
+          {
+            "type": "pattern",
+            "named": true
+          }
+        ]
+      },
+      "payload": {
+        "multiple": false,
+        "required": false,
         "types": [
           {
             "type": "pattern",
@@ -2536,6 +2560,47 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "variant",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "variant_ctor",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variant_ctor",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "payload": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

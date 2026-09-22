@@ -244,6 +244,13 @@
   pattern: (tuple_pattern
     (identifier) @variable.parameter))
 
+; ───── Variants ─────
+(variant_ctor
+  name: (identifier) @constructor)
+
+(match_arm
+  constructor: (identifier) @constructor)
+
 ; ───── Applications ─────
 (ret
   callee: (path

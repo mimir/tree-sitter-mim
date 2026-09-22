@@ -312,6 +312,9 @@ module.exports = grammar({
       $.star,
       $.signed,
       $.unwrap,
+      // A variant starts with `|`, so it stays out of `_operand` as well: `f | A` must not be
+      // an application, or a match arm's body would swallow the next arm.
+      $.variant,
     ),
 
     // A primary expression that may also stand as an application argument.
@@ -571,9 +574,24 @@ module.exports = grammar({
     )),
 
     match_arm: $ => prec.right(PREC.trailing, seq(
-      field("pattern", $.pattern),
+      choice(
+        field("pattern", $.pattern),
+        // `Cons (h, t)`: only a bare constructor name may take a payload pattern.
+        seq(field("constructor", $.identifier), field("payload", $.pattern)),
+      ),
       "=>",
       field("body", $.expression),
+    )),
+
+    // `| I: e | ...`; a constructor without `: e` carries `[]`, and a lone `|` is the empty variant.
+    variant: $ => prec.right(PREC.trailing, seq(
+      "|",
+      optional(seq($.variant_ctor, repeat(seq("|", $.variant_ctor)))),
+    )),
+
+    variant_ctor: $ => prec.right(PREC.trailing, seq(
+      field("name", $.identifier),
+      optional(seq(":", field("payload", $.expression))),
     )),
 
     /*
