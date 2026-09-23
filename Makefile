@@ -3,7 +3,8 @@ $(error Windows is not supported)
 endif
 
 LANGUAGE_NAME := tree-sitter-mim
-HOMEPAGE_URL := https://gitlab.com/amaebe/dotfiles
+DESCRIPTION := Tree-sitter grammar for Mim, the front-end language of MimIR
+HOMEPAGE_URL := https://github.com/mimir/tree-sitter-mim
 VERSION := 0.1.0
 
 # repository
@@ -66,8 +67,11 @@ $(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
 		-e 's|@PROJECT_HOMEPAGE_URL@|$(HOMEPAGE_URL)|' \
 		-e 's|@CMAKE_INSTALL_PREFIX@|$(PREFIX)|' $< > $@
 
-$(PARSER): $(SRC_DIR)/grammar.json
-	$(TS) generate $^
+# `tree-sitter generate` writes parser.c, grammar.json and node-types.json in one go
+$(PARSER): grammar.js
+	$(TS) generate
+
+generate: $(PARSER)
 
 install: all
 	install -d '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/mim '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter '$(DESTDIR)$(PCLIBDIR)' '$(DESTDIR)$(LIBDIR)'
@@ -93,7 +97,7 @@ uninstall:
 clean:
 	$(RM) $(OBJS) $(LANGUAGE_NAME).pc lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT)
 
-test:
+test: $(PARSER)
 	$(TS) test
 
-.PHONY: all install uninstall clean test
+.PHONY: all generate install uninstall clean test

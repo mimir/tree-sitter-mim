@@ -284,6 +284,56 @@ let m = match x with | A => 1 | B => 2;
         (nat_literal)))))
 
 =====
+match arm with a constructor payload
+=====
+
+let m = match x with | Nil => 0 | Cons (h, t) => h;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (match
+      (path
+        (identifier))
+      (match_arm
+        (identifier)
+        (nat_literal))
+      (match_arm
+        (identifier)
+        (tuple_pattern
+          (identifier)
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
+match arm selecting its case by index
+=====
+
+let m = match x with | 0 => 0 | 1 (h, t) => h;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (match
+      (path
+        (identifier))
+      (match_arm
+        (nat_literal)
+        (nat_literal))
+      (match_arm
+        (nat_literal)
+        (tuple_pattern
+          (identifier)
+          (identifier))
+        (path
+          (identifier))))))
+
+=====
 match expression with a leading bar omitted
 =====
 

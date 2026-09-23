@@ -1,3 +1,10 @@
 tree-sitter-mim.wasm
 test/plugins
+
+# make / tree-sitter build artifacts
+*.a
+*.o
 *.so
+*.so.*
+*.dylib
+tree-sitter-mim.pc

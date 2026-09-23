@@ -372,20 +372,20 @@ let t = x inj A ∪ B;
           (identifier))))))
 
 =====
-variant
+variant type
 =====
 
-rec List = | Nil | Cons: [Nat, List];
+let t = | Nil | Cons: [Nat, T];
 
 ---
 
 (source_file
-  (rec
+  (let
     (identifier)
     (variant
-      (variant_ctor
+      (variant_case
         (identifier))
-      (variant_ctor
+      (variant_case
         (identifier)
         (sigma
           (primitive)
@@ -393,55 +393,14 @@ rec List = | Nil | Cons: [Nat, List];
             (identifier)))))))
 
 =====
-anonymous and empty variant
+empty variant
 =====
 
-lam f (x: | A | B: Nat) (y: |): Nat = 0;
-
----
-
-(source_file
-  (lam
-    (identifier)
-    (domain
-      (tuple_pattern
-        (typed_binder
-          (identifier)
-          (variant
-            (variant_ctor
-              (identifier))
-            (variant_ctor
-              (identifier)
-              (primitive))))))
-    (domain
-      (tuple_pattern
-        (typed_binder
-          (identifier)
-          (variant))))
-    (primitive)
-    (nat_literal)))
-
-=====
-match on a variant with payload patterns
-=====
-
-let n = match l with | Nil => 0 | Cons (h, _) => h;
+let t = |;
 
 ---
 
 (source_file
   (let
     (identifier)
-    (match
-      (path
-        (identifier))
-      (match_arm
-        (identifier)
-        (nat_literal))
-      (match_arm
-        (identifier)
-        (tuple_pattern
-          (identifier)
-          (identifier))
-        (path
-          (identifier))))))
+    (variant)))

@@ -217,6 +217,15 @@
 (anx
   name: (identifier) @constant)
 
+; a variant's cases and the arms that name them are constructors, not values -
+; an arm without a payload stays a plain binder, since a union arm looks the same
+(variant_case
+  name: (identifier) @constructor)
+
+(match_arm
+  pattern: (identifier) @constructor
+  payload: (_))
+
 ; ───── Binders ─────
 (typed_binder
   name: (identifier) @variable.parameter)
@@ -243,13 +252,6 @@
 (ret
   pattern: (tuple_pattern
     (identifier) @variable.parameter))
-
-; ───── Variants ─────
-(variant_ctor
-  name: (identifier) @constructor)
-
-(match_arm
-  constructor: (identifier) @constructor)
 
 ; ───── Applications ─────
 (ret

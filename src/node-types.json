@@ -1856,12 +1856,12 @@
           }
         ]
       },
-      "constructor": {
+      "index": {
         "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "identifier",
+            "type": "nat_literal",
             "named": true
           }
         ]
@@ -2571,14 +2571,14 @@
       "required": false,
       "types": [
         {
-          "type": "variant_ctor",
+          "type": "variant_case",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "variant_ctor",
+    "type": "variant_case",
     "named": true,
     "fields": {
       "name": {

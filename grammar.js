@@ -16,6 +16,9 @@ const PREC = {
   // body, the final expression of a declaration expression, and a `Cn` domain.  Below
   // everything, so every operator is shifted into that trailing expression instead.
   trailing: -1,
+  // `|` continues a variant only where no enclosing `match` is waiting for it; see langref's
+  // "parenthesize a variant inside a `match` arm".
+  variant: -2,
   // `I: e` - the type reaches across `→` and `where`, as it does within `[...]`.
   binder: 1,
   where: 10,
@@ -312,8 +315,6 @@ module.exports = grammar({
       $.star,
       $.signed,
       $.unwrap,
-      // A variant starts with `|`, so it stays out of `_operand` as well: `f | A` must not be
-      // an application, or a match arm's body would swallow the next arm.
       $.variant,
     ),
 
@@ -573,25 +574,15 @@ module.exports = grammar({
       repeat(seq("|", $.match_arm)),
     )),
 
+    // A union arm is a plain pattern; a variant arm names its case, or gives its index, and may bind a payload.
     match_arm: $ => prec.right(PREC.trailing, seq(
       choice(
         field("pattern", $.pattern),
-        // `Cons (h, t)`: only a bare constructor name may take a payload pattern.
-        seq(field("constructor", $.identifier), field("payload", $.pattern)),
+        field("index", $.nat_literal),
       ),
+      optional(field("payload", $.pattern)),
       "=>",
       field("body", $.expression),
-    )),
-
-    // `| I: e | ...`; a constructor without `: e` carries `[]`, and a lone `|` is the empty variant.
-    variant: $ => prec.right(PREC.trailing, seq(
-      "|",
-      optional(seq($.variant_ctor, repeat(seq("|", $.variant_ctor)))),
-    )),
-
-    variant_ctor: $ => prec.right(PREC.trailing, seq(
-      field("name", $.identifier),
-      optional(seq(":", field("payload", $.expression))),
     )),
 
     /*
@@ -656,6 +647,17 @@ module.exports = grammar({
         field("right", $.expression),
       )),
     ),
+
+    // `| I: e | ...`; a lone `|` is the empty variant and the last payload extends as far right as it can.
+    variant: $ => prec.right(PREC.variant, seq(
+      "|",
+      optional(seq($.variant_case, repeat(seq("|", $.variant_case)))),
+    )),
+
+    variant_case: $ => prec.right(PREC.variant, seq(
+      field("name", $.identifier),
+      optional(seq(":", field("payload", $.expression))),
+    )),
 
     union: $ => prec.left(PREC.union, seq(
       field("left", $.expression),
