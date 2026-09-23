@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 project(tree-sitter-mim
         VERSION "0.1.0"
         DESCRIPTION "Tree-sitter grammar for Mim, the front-end language of MimIR"
-        HOMEPAGE_URL "https://gitlab.com/amaebe/dotfiles"
+        HOMEPAGE_URL "https://github.com/mimir/tree-sitter-mim"
         LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)

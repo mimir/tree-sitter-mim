@@ -26,7 +26,11 @@ This will be moved to a plugin once plugin support lands in helix master.
 
 ### VSCode
 
-A VSCode plugin is available [here](https://marketplace.visualstudio.com/items?itemName=MimIRExtensions.tree-sitter-mim-vscode)
+[tree-sitter-mim-vscode](https://marketplace.visualstudio.com/items?itemName=MimIRExtensions.tree-sitter-mim-vscode)
+is a thin Mim-specific wrapper around [AlecGhost's generic tree-sitter extension for
+VSCode](https://github.com/AlecGhost/tree-sitter-vscode): the highlighting itself comes from *this*
+grammar, which the extension pulls in - it does not ship a parser of its own.  It is not maintained
+here and untested by us - reports welcome.
 
 ### Neovim
 

@@ -19,7 +19,7 @@ license.text = "MIT"
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://gitlab.com/amaebe/dotfiles"
+Homepage = "https://github.com/mimir/tree-sitter-mim"
 
 [project.optional-dependencies]
 core = ["tree-sitter~=0.24"]

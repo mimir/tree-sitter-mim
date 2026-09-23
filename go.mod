@@ -1,4 +1,4 @@
-module gitlab.com/amaebe/dotfiles
+module github.com/mimir/tree-sitter-mim
 
 go 1.22
 

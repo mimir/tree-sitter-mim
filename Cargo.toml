@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 keywords = ["incremental", "parsing", "tree-sitter", "mim"]
 categories = ["parser-implementations", "parsing", "text-editors"]
-repository = "https://gitlab.com/amaebe/dotfiles"
+repository = "https://github.com/mimir/tree-sitter-mim"
 edition = "2021"
 autoexamples = false
 
