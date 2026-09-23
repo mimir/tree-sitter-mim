@@ -1,6 +1,6 @@
 # Tree-Sitter Grammar for MimIR
 
-[![CI](https://img.shields.io/github/actions/workflow/status/mimir/tree-sitter-mim/ci.yml?branch=main&label=tests&logo=github)](https://github.com/mimir/tree-sitter-mim/actions/workflows/ci.yml)
+[![tests](https://img.shields.io/github/actions/workflow/status/mimir/tree-sitter-mim/ci.yml?branch=main&label=tests&logo=github)](https://github.com/mimir/tree-sitter-mim/actions/workflows/ci.yml)
 
 ## Development
 
