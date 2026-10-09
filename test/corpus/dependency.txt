@@ -93,10 +93,10 @@ pub use eq as *;
 module
 =====
 
-pub mod mode {
+pub mod mode
     anx let us = 0b00;
     anx nsw = uS;
-}
+end
 
 ---
 
@@ -118,11 +118,11 @@ pub mod mode {
 nested modules
 =====
 
-mod a {
-    priv mod b {
+mod a
+    priv mod b
         let x = 0;
-    }
-}
+    end
+end
 
 ---
 

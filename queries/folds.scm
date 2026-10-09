@@ -1,5 +1,6 @@
 [
   (mod)
+  (mutual)
   (lam)
   (rec)
   (rule)

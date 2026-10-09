@@ -147,18 +147,22 @@ rec S = [n: Nat, «n; Nat»];
 mutually recursive declarations
 =====
 
-rec A = [Nat, B] and B = [Nat, A];
+mutual
+    rec A = [Nat, B];
+    rec B = [Nat, A];
+end
 
 ---
 
 (source_file
-  (rec
-    (identifier)
-    (sigma
-      (primitive)
-      (path
-        (identifier)))
-    (and
+  (mutual
+    (rec
+      (identifier)
+      (sigma
+        (primitive)
+        (path
+          (identifier))))
+    (rec
       (identifier)
       (sigma
         (primitive)
@@ -166,18 +170,25 @@ rec A = [Nat, B] and B = [Nat, A];
           (identifier))))))
 
 =====
-rec continued by a lambda declaration
+mutual rec and lambda declaration
 =====
 
-rec T = Nat and lam f (x: T): T = x;
+mutual
+    rec T = [Nat, f];
+    lam f (x: T): T = x;
+end
 
 ---
 
 (source_file
-  (rec
-    (identifier)
-    (primitive)
-    (and
+  (mutual
+    (rec
+      (identifier)
+      (sigma
+        (primitive)
+        (path
+          (identifier))))
+    (lam
       (identifier)
       (domain
         (tuple_pattern

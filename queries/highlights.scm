@@ -42,7 +42,7 @@
   "let"
   "axm"
   "rec"
-  "and"
+  "mutual"
   "rule"
   "norm"
   "where"
@@ -190,10 +190,6 @@
 ]
 
 (lam
-  name: (identifier) @function
-  (#not-lua-match? @function "^%u"))
-
-(and
   name: (identifier) @function
   (#not-lua-match? @function "^%u"))
 

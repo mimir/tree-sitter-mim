@@ -233,29 +233,32 @@ anx lam minus (m: Nat) {s: Nat} (a: Idx s): Idx s = wrap.sub m (0:(Idx s), a);
           (identifier))))))
 
 =====
-and chain
+mutual block
 =====
 
-lam f (x: Nat): Nat = g x
-and lam g (x: Nat): Nat = f x;
+mutual
+    lam f (x: Nat): Nat = g x;
+    lam g (x: Nat): Nat = f x;
+end
 
 ---
 
 (source_file
-  (lam
-    (identifier)
-    (domain
-      (tuple_pattern
-        (typed_binder
-          (identifier)
-          (primitive))))
-    (primitive)
-    (application
-      (path
-        (identifier))
-      (path
-        (identifier)))
-    (and
+  (mutual
+    (lam
+      (identifier)
+      (domain
+        (tuple_pattern
+          (typed_binder
+            (identifier)
+            (primitive))))
+      (primitive)
+      (application
+        (path
+          (identifier))
+        (path
+          (identifier))))
+    (lam
       (identifier)
       (domain
         (tuple_pattern

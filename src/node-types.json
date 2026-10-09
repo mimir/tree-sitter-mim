@@ -28,6 +28,10 @@
         "named": true
       },
       {
+        "type": "mutual",
+        "named": true
+      },
+      {
         "type": "plugin",
         "named": true
       },
@@ -310,70 +314,6 @@
         },
         {
           "type": "sigma",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "and",
-    "named": true,
-    "fields": {
-      "body": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "codomain": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "kind": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "con",
-            "named": false
-          },
-          {
-            "type": "fun",
-            "named": false
-          },
-          {
-            "type": "lam",
-            "named": false
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "domain",
           "named": true
         }
       ]
@@ -1708,10 +1648,6 @@
       "required": true,
       "types": [
         {
-          "type": "and",
-          "named": true
-        },
-        {
           "type": "domain",
           "named": true
         },
@@ -1924,6 +1860,29 @@
     "fields": {}
   },
   {
+    "type": "mutual",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "lam",
+          "named": true
+        },
+        {
+          "type": "modifier",
+          "named": true
+        },
+        {
+          "type": "rec",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "nat_literal",
     "named": true,
     "fields": {
@@ -2092,10 +2051,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "and",
-          "named": true
-        },
         {
           "type": "modifier",
           "named": true
@@ -2818,10 +2773,6 @@
     "named": false
   },
   {
-    "type": "and",
-    "named": false
-  },
-  {
     "type": "anx",
     "named": false
   },
@@ -2940,6 +2891,10 @@
   },
   {
     "type": "mod",
+    "named": false
+  },
+  {
+    "type": "mutual",
     "named": false
   },
   {

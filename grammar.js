@@ -112,6 +112,7 @@ module.exports = grammar({
       $.axm,
       $.lam,
       $.rec,
+      $.mutual,
       $.rule,
     ),
 
@@ -135,9 +136,8 @@ module.exports = grammar({
       repeat($.modifier),
       "mod",
       field("name", $.identifier),
-      "{",
       repeat(choice($.declaration, ";")),
-      "}",
+      "end",
     ),
 
     let: $ => seq(
@@ -194,7 +194,6 @@ module.exports = grammar({
         seq("=", field("body", $.expression)),
         ";", // a bodyless `extern` forward declaration
       ),
-      repeat($.and),
     )),
 
     rec: $ => prec.right(seq(
@@ -203,21 +202,9 @@ module.exports = grammar({
       field("name", $.identifier),
       "=",
       field("body", $.expression),
-      repeat($.and),
     )),
 
-    and: $ => choice(
-      seq("and", field("name", $.identifier), "=", field("body", $.expression)),
-      seq(
-        "and",
-        field("kind", choice("lam", "con", "fun")),
-        field("name", $.identifier),
-        repeat1($.domain),
-        optional(seq(":", field("codomain", $.expression))),
-        "=",
-        field("body", $.expression),
-      ),
-    ),
+    mutual: $ => seq(repeat($.modifier), "mutual", repeat(choice($.lam, $.rec, ";")), "end"),
 
     rule: $ => seq(
       repeat($.modifier),
