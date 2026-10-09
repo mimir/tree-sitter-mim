@@ -112,6 +112,7 @@ module.exports = grammar({
       $.axm,
       $.lam,
       $.rec,
+      $.nom,
       $.mutual,
       $.rule,
     ),
@@ -204,7 +205,15 @@ module.exports = grammar({
       field("body", $.expression),
     )),
 
-    mutual: $ => seq(repeat($.modifier), "mutual", repeat(choice($.lam, $.rec, ";")), "end"),
+    nom: $ => prec.right(seq(
+      repeat($.modifier),
+      "nom",
+      field("name", $.identifier),
+      "=",
+      field("body", $.expression),
+    )),
+
+    mutual: $ => seq(repeat($.modifier), "mutual", repeat(choice($.lam, $.rec, $.nom, ";")), "end"),
 
     rule: $ => seq(
       repeat($.modifier),

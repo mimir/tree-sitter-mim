@@ -60,6 +60,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "nom"
+        },
+        {
+          "type": "SYMBOL",
           "name": "mutual"
         },
         {
@@ -770,6 +774,46 @@
         ]
       }
     },
+    "nom": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "modifier"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "nom"
+          },
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "="
+          },
+          {
+            "type": "FIELD",
+            "name": "body",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
+          }
+        ]
+      }
+    },
     "mutual": {
       "type": "SEQ",
       "members": [
@@ -796,6 +840,10 @@
               {
                 "type": "SYMBOL",
                 "name": "rec"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "nom"
               },
               {
                 "type": "STRING",

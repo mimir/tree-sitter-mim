@@ -42,6 +42,7 @@
   "let"
   "axm"
   "rec"
+  "nom"
   "mutual"
   "rule"
   "norm"

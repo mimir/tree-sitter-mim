@@ -144,6 +144,19 @@ rec S = [n: Nat, «n; Nat»];
         (primitive)))))
 
 =====
+nominal declaration
+=====
+
+nom Meter = I32;
+
+---
+
+(source_file
+  (nom
+    (identifier)
+    (primitive)))
+
+=====
 mutually recursive declarations
 =====
 

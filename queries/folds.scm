@@ -3,6 +3,7 @@
   (mutual)
   (lam)
   (rec)
+  (nom)
   (rule)
   (where)
   (match)

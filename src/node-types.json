@@ -32,6 +32,10 @@
         "named": true
       },
       {
+        "type": "nom",
+        "named": true
+      },
+      {
         "type": "plugin",
         "named": true
       },
@@ -1876,6 +1880,10 @@
           "named": true
         },
         {
+          "type": "nom",
+          "named": true
+        },
+        {
           "type": "rec",
           "named": true
         }
@@ -1896,6 +1904,42 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "nom",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2895,6 +2939,10 @@
   },
   {
     "type": "mutual",
+    "named": false
+  },
+  {
+    "type": "nom",
     "named": false
   },
   {
