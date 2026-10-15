@@ -41,11 +41,11 @@ don't commit unrelated churn in those headers.
 
 The corpus under `test/corpus/` is small and hand-written; the real regression suite is the MimIR tree
 next door. Every `.mim` file in `mimir/lit/` and `mimir/src/mim/plug/` must parse clean **except** the
-six deliberately invalid programs under `lit/error/`:
+seven deliberately invalid programs under `lit/error/`:
 
 ```sh
 tree-sitter parse -q $(find ../mimir/lit ../mimir/src/mim/plug -name '*.mim')
-# expected: only lit/error/{insert_no_index,missing_name,path_member,
+# expected: only lit/error/{char_lit,insert_no_index,missing_name,path_member,
 #           unanchored_delim,unterminated_string,where_semicolon}.mim report an ERROR
 ```
 
