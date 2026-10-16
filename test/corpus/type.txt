@@ -2,7 +2,7 @@
 kinds
 =====
 
-let a = Univ;
+let a = Level;
 let b = Type 0;
 let c = *;
 let d = ★;

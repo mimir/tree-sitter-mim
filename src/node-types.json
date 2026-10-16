@@ -2793,6 +2793,10 @@
     "named": false
   },
   {
+    "type": "Level",
+    "named": false
+  },
+  {
     "type": "Nat",
     "named": false
   },
@@ -2802,10 +2806,6 @@
   },
   {
     "type": "Type",
-    "named": false
-  },
-  {
-    "type": "Univ",
     "named": false
   },
   {

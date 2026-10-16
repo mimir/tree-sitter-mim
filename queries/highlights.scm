@@ -89,7 +89,7 @@
 
 (primitive) @type.builtin
 
-; `*` abbreviates `Type (0:Univ)`
+; `*` abbreviates `Type (0:Level)`
 (star) @type.builtin
 
 [

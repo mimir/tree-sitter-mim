@@ -356,7 +356,7 @@ module.exports = grammar({
     // Not all of these are types: `tt`/`ff` are the `Bool` literals, and `iN` is the *literal*
     // 2^N - a `Nat`, `lit_i32()` in `emit.cpp` - while `IN` names the type `Idx 2^N`.
     primitive: $ => choice(
-      "Univ",
+      "Level",
       "Nat",
       "Idx",
       "Bool",
@@ -367,7 +367,7 @@ module.exports = grammar({
       "□",
     ),
 
-    // `*` abbreviates `Type (0:Univ)`; `★` is its Unicode spelling.
+    // `*` abbreviates `Type (0:Level)`; `★` is its Unicode spelling.
     star: $ => choice("*", "★"),
 
     bot: $ => choice("bot", "⊥"),

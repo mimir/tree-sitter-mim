@@ -92,7 +92,7 @@ Grammar changes that "fix" one expression usually mean nudging these, not adding
 
 ### `*`, `+` and `-` are operators first
 
-`*` is both `Type (0:Univ)` and multiplication; `+`/`-` are both a literal's sign and infix operators.
+`*` is both `Type (0:Level)` and multiplication; `+`/`-` are both a literal's sign and infix operators.
 The reference parser resolves this by checking for an infix operator before an application argument, so
 with a left operand at hand the operator reading always wins — `f *` multiplies and `f -23` subtracts.
 
