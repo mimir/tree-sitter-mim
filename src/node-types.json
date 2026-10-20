@@ -1936,6 +1936,10 @@
       "required": false,
       "types": [
         {
+          "type": "domain",
+          "named": true
+        },
+        {
           "type": "modifier",
           "named": true
         }

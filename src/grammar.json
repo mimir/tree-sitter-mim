@@ -800,6 +800,18 @@
             }
           },
           {
+            "type": "REPEAT",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_nom_domain"
+              },
+              "named": true,
+              "value": "domain"
+            }
+          },
+          {
             "type": "STRING",
             "value": "="
           },
@@ -810,6 +822,23 @@
               "type": "SYMBOL",
               "name": "expression"
             }
+          }
+        ]
+      }
+    },
+    "_nom_domain": {
+      "type": "FIELD",
+      "name": "pattern",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "pattern"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "implicit"
           }
         ]
       }

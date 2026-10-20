@@ -209,9 +209,12 @@ module.exports = grammar({
       repeat($.modifier),
       "nom",
       field("name", $.identifier),
+      repeat(alias($._nom_domain, $.domain)), // a type constructor: `lam I dom+ = nom I = e; I`
       "=",
       field("body", $.expression),
     )),
+
+    _nom_domain: $ => field("pattern", choice($.pattern, $.implicit)),
 
     mutual: $ => seq(repeat($.modifier), "mutual", repeat(choice($.lam, $.rec, $.nom, ";")), "end"),
 

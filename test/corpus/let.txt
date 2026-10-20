@@ -157,6 +157,35 @@ nom Meter = I32;
     (primitive)))
 
 =====
+nominal type constructor
+=====
+
+nom Opt {U: *} (T: *) = | None | Some: T;
+
+---
+
+(source_file
+  (nom
+    (identifier)
+    (domain
+      (implicit
+        (typed_binder
+          (identifier)
+          (star))))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (star))))
+    (variant
+      (variant_case
+        (identifier))
+      (variant_case
+        (identifier)
+        (path
+          (identifier))))))
+
+=====
 mutually recursive declarations
 =====
 
