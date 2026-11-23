@@ -254,10 +254,11 @@ rule foo (a: Nat): (a + a) => (a * 2);
 (source_file
   (rule
     (identifier)
-    (tuple_pattern
-      (typed_binder
-        (identifier)
-        (primitive)))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
     (tuple
       (binary_expression
         (path
@@ -271,6 +272,48 @@ rule foo (a: Nat): (a + a) => (a * 2);
         (nat_literal)))))
 
 =====
+rule family
+=====
+
+rule dup (n: Nat) {m: Nat} (a: Idx n): a => (a, a);
+rule one: 1 => 1;
+
+---
+
+(source_file
+  (rule
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (domain
+      (implicit
+        (typed_binder
+          (identifier)
+          (primitive))))
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (application
+            (primitive)
+            (path
+              (identifier))))))
+    (path
+      (identifier))
+    (tuple
+      (path
+        (identifier))
+      (path
+        (identifier))))
+  (rule
+    (identifier)
+    (nat_literal)
+    (nat_literal)))
+
+=====
 guarded normalizing rule
 =====
 
@@ -281,11 +324,12 @@ norm bar (a b: Nat): a + b when a == b => a * 2;
 (source_file
   (rule
     (identifier)
-    (tuple_pattern
-      (group
-        (identifier)
-        (identifier)
-        (primitive)))
+    (domain
+      (tuple_pattern
+        (group
+          (identifier)
+          (identifier)
+          (primitive))))
     (binary_expression
       (path
         (identifier))

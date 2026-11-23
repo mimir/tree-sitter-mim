@@ -84,6 +84,10 @@
         "named": true
       },
       {
+        "type": "fire",
+        "named": true
+      },
+      {
         "type": "injection",
         "named": true
       },
@@ -96,7 +100,7 @@
         "named": true
       },
       {
-        "type": "union",
+        "type": "rule_type",
         "named": true
       },
       {
@@ -164,6 +168,10 @@
         "named": true
       },
       {
+        "type": "hole",
+        "named": true
+      },
+      {
         "type": "idx_literal",
         "named": true
       },
@@ -196,7 +204,7 @@
         "named": true
       },
       {
-        "type": "rule_type",
+        "type": "rule_expr",
         "named": true
       },
       {
@@ -364,6 +372,10 @@
             "named": true
           },
           {
+            "type": "hole",
+            "named": true
+          },
+          {
             "type": "idx_literal",
             "named": true
           },
@@ -396,7 +408,7 @@
             "named": true
           },
           {
-            "type": "rule_type",
+            "type": "rule_expr",
             "named": true
           },
           {
@@ -546,6 +558,10 @@
             "named": true
           },
           {
+            "type": "hole",
+            "named": true
+          },
+          {
             "type": "idx_literal",
             "named": true
           },
@@ -578,7 +594,7 @@
             "named": true
           },
           {
-            "type": "rule_type",
+            "type": "rule_expr",
             "named": true
           },
           {
@@ -656,6 +672,10 @@
             "named": true
           },
           {
+            "type": "hole",
+            "named": true
+          },
+          {
             "type": "idx_literal",
             "named": true
           },
@@ -688,7 +708,7 @@
             "named": true
           },
           {
-            "type": "rule_type",
+            "type": "rule_expr",
             "named": true
           },
           {
@@ -1078,6 +1098,10 @@
             "named": true
           },
           {
+            "type": "hole",
+            "named": true
+          },
+          {
             "type": "idx_literal",
             "named": true
           },
@@ -1110,7 +1134,7 @@
             "named": true
           },
           {
-            "type": "rule_type",
+            "type": "rule_expr",
             "named": true
           },
           {
@@ -1180,6 +1204,10 @@
             "named": true
           },
           {
+            "type": "hole",
+            "named": true
+          },
+          {
             "type": "idx_literal",
             "named": true
           },
@@ -1212,7 +1240,7 @@
             "named": true
           },
           {
-            "type": "rule_type",
+            "type": "rule_expr",
             "named": true
           },
           {
@@ -1252,6 +1280,32 @@
     "named": true,
     "fields": {
       "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "fire",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "rule": {
         "multiple": false,
         "required": true,
         "types": [
@@ -1352,6 +1406,10 @@
             "named": true
           },
           {
+            "type": "hole",
+            "named": true
+          },
+          {
             "type": "idx_literal",
             "named": true
           },
@@ -1388,7 +1446,7 @@
             "named": true
           },
           {
-            "type": "rule_type",
+            "type": "rule_expr",
             "named": true
           },
           {
@@ -2200,6 +2258,56 @@
           }
         ]
       },
+      "rhs": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "domain",
+          "named": true
+        },
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rule_expr",
+    "named": true,
+    "fields": {
+      "guard": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "lhs": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
       "pattern": {
         "multiple": false,
         "required": true,
@@ -2220,23 +2328,23 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "modifier",
-          "named": true
-        }
-      ]
     }
   },
   {
     "type": "rule_type",
     "named": true,
     "fields": {
-      "meta": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "right": {
         "multiple": false,
         "required": true,
         "types": [
@@ -2472,32 +2580,6 @@
         ]
       },
       "type": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "union",
-    "named": true,
-    "fields": {
-      "left": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "right": {
         "multiple": false,
         "required": true,
         "types": [
@@ -2781,7 +2863,15 @@
     "named": false
   },
   {
+    "type": "I2",
+    "named": false
+  },
+  {
     "type": "I32",
+    "named": false
+  },
+  {
+    "type": "I4",
     "named": false
   },
   {
@@ -2802,10 +2892,6 @@
   },
   {
     "type": "Nat",
-    "named": false
-  },
-  {
-    "type": "Rule",
     "named": false
   },
   {
@@ -2881,6 +2967,10 @@
     "named": false
   },
   {
+    "type": "hole",
+    "named": true
+  },
+  {
     "type": "i1",
     "named": false
   },
@@ -2889,7 +2979,15 @@
     "named": false
   },
   {
+    "type": "i2",
+    "named": false
+  },
+  {
     "type": "i32",
+    "named": false
+  },
+  {
+    "type": "i4",
     "named": false
   },
   {
@@ -2974,6 +3072,10 @@
     "named": false
   },
   {
+    "type": "rl",
+    "named": false
+  },
+  {
     "type": "rule",
     "named": false
   },
@@ -3014,7 +3116,15 @@
     "named": false
   },
   {
+    "type": "|>",
+    "named": false
+  },
+  {
     "type": "}",
+    "named": false
+  },
+  {
+    "type": "~>",
     "named": false
   },
   {
@@ -3046,7 +3156,7 @@
     "named": false
   },
   {
-    "type": "∪",
+    "type": "↝",
     "named": false
   },
   {
@@ -3059,6 +3169,10 @@
   },
   {
     "type": "□",
+    "named": false
+  },
+  {
+    "type": "▷",
     "named": false
   },
   {

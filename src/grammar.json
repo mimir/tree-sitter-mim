@@ -888,52 +888,69 @@
       ]
     },
     "rule": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "modifier"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "kind",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "rule"
+                },
+                {
+                  "type": "STRING",
+                  "value": "norm"
+                }
+              ]
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_nom_domain"
+              },
+              "named": true,
+              "value": "domain"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": ":"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_rule_body"
+          }
+        ]
+      }
+    },
+    "_rule_body": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "modifier"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "kind",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "rule"
-              },
-              {
-                "type": "STRING",
-                "value": "norm"
-              }
-            ]
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "pattern",
-          "content": {
-            "type": "SYMBOL",
-            "name": "pattern"
-          }
-        },
-        {
-          "type": "STRING",
-          "value": ":"
-        },
         {
           "type": "FIELD",
           "name": "lhs",
@@ -1436,7 +1453,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "rule_type"
+          "name": "hole"
         },
         {
           "type": "SYMBOL",
@@ -1485,6 +1502,10 @@
         {
           "type": "SYMBOL",
           "name": "lambda"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "rule_expr"
         },
         {
           "type": "SYMBOL",
@@ -1545,7 +1566,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "union"
+          "name": "rule_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "fire"
         },
         {
           "type": "SYMBOL",
@@ -1590,6 +1615,14 @@
         },
         {
           "type": "STRING",
+          "value": "i2"
+        },
+        {
+          "type": "STRING",
+          "value": "i4"
+        },
+        {
+          "type": "STRING",
           "value": "i8"
         },
         {
@@ -1607,6 +1640,14 @@
         {
           "type": "STRING",
           "value": "I1"
+        },
+        {
+          "type": "STRING",
+          "value": "I2"
+        },
+        {
+          "type": "STRING",
+          "value": "I4"
         },
         {
           "type": "STRING",
@@ -1690,26 +1731,9 @@
         ]
       }
     },
-    "rule_type": {
-      "type": "PREC_LEFT",
-      "value": 120,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "Rule"
-          },
-          {
-            "type": "FIELD",
-            "name": "meta",
-            "content": {
-              "type": "SYMBOL",
-              "name": "expression"
-            }
-          }
-        ]
-      }
+    "hole": {
+      "type": "STRING",
+      "value": "?"
     },
     "path": {
       "type": "SEQ",
@@ -2370,6 +2394,35 @@
               "type": "SYMBOL",
               "name": "expression"
             }
+          }
+        ]
+      }
+    },
+    "rule_expr": {
+      "type": "PREC_RIGHT",
+      "value": -1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "rl"
+          },
+          {
+            "type": "FIELD",
+            "name": "pattern",
+            "content": {
+              "type": "SYMBOL",
+              "name": "pattern"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": ":"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_rule_body"
           }
         ]
       }
@@ -3299,9 +3352,9 @@
         ]
       }
     },
-    "union": {
-      "type": "PREC_LEFT",
-      "value": 40,
+    "rule_type": {
+      "type": "PREC_RIGHT",
+      "value": 50,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3314,12 +3367,59 @@
             }
           },
           {
-            "type": "STRING",
-            "value": "∪"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "↝"
+              },
+              {
+                "type": "STRING",
+                "value": "~>"
+              }
+            ]
           },
           {
             "type": "FIELD",
             "name": "right",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
+          }
+        ]
+      }
+    },
+    "fire": {
+      "type": "PREC_RIGHT",
+      "value": 60,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "rule",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "▷"
+              },
+              {
+                "type": "STRING",
+                "value": "|>"
+              }
+            ]
+          },
+          {
+            "type": "FIELD",
+            "name": "argument",
             "content": {
               "type": "SYMBOL",
               "name": "expression"

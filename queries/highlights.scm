@@ -45,6 +45,7 @@
   "nom"
   "mutual"
   "rule"
+  "rl"
   "norm"
   "where"
   "end"
@@ -82,7 +83,6 @@
 ; ───── Types ─────
 [
   "Type"
-  "Rule"
   "Cn"
   "Fn"
 ] @type.builtin
@@ -91,6 +91,9 @@
 
 ; `*` abbreviates `Type (0:Level)`
 (star) @type.builtin
+
+; `?` stands for a term or a type alike
+(hole) @variable.builtin
 
 [
   (bot)
@@ -107,6 +110,8 @@
 ; names the type `Idx 2^N` and keeps the rule above.
 [
   "i1"
+  "i2"
+  "i4"
   "i8"
   "i16"
   "i32"
@@ -125,7 +130,10 @@
   "<-"
   "←"
   "=>"
-  "∪"
+  "↝"
+  "~>"
+  "▷"
+  "|>"
 ] @operator
 
 (binary_expression
@@ -215,7 +223,7 @@
   name: (identifier) @constant)
 
 ; a variant's cases and the arms that name them are constructors, not values -
-; an arm without a payload stays a plain binder, since a union arm looks the same
+; an arm without a payload stays a plain binder, since an arm on a non-variant looks the same
 (variant_case
   name: (identifier) @constructor)
 

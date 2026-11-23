@@ -24,8 +24,8 @@ const PREC = {
   where: 10,
   ins: 20,
   inj: 30,
-  union: 40,
   arrow: 50,
+  fire: 60,
   eq: 70,
   rel: 80,
   add: 90,
@@ -218,12 +218,17 @@ module.exports = grammar({
 
     mutual: $ => seq(repeat($.modifier), "mutual", repeat(choice($.lam, $.rec, $.nom, ";")), "end"),
 
-    rule: $ => seq(
+    // The last domain binds the meta variables; the ones before it make a family of rules.
+    rule: $ => prec.right(seq(
       repeat($.modifier),
       field("kind", choice("rule", "norm")),
       field("name", $.identifier),
-      field("pattern", $.pattern),
+      repeat(alias($._nom_domain, $.domain)),
       ":",
+      $._rule_body,
+    )),
+
+    _rule_body: $ => seq(
       field("lhs", $.expression),
       optional(seq("when", field("guard", $.expression))),
       "=>",
@@ -322,7 +327,7 @@ module.exports = grammar({
       $.primitive,
       $.path,
       $.type,
-      $.rule_type,
+      $.hole,
       $.nat_literal,
       $.idx_literal,
       $.float_literal,
@@ -335,6 +340,7 @@ module.exports = grammar({
       $.cn_type,
       $.fn_type,
       $.lambda,
+      $.rule_expr,
       $.ret,
       $.single,
       $.wrap,
@@ -351,7 +357,8 @@ module.exports = grammar({
       $.application,
       $.binary_expression,
       $.pi,
-      $.union,
+      $.rule_type,
+      $.fire,
       $.injection,
       $.where,
     ),
@@ -365,8 +372,8 @@ module.exports = grammar({
       "Bool",
       "tt",
       "ff",
-      "i1", "i8", "i16", "i32", "i64",
-      "I1", "I8", "I16", "I32", "I64",
+      "i1", "i2", "i4", "i8", "i16", "i32", "i64",
+      "I1", "I2", "I4", "I8", "I16", "I32", "I64",
       "□",
     ),
 
@@ -376,9 +383,11 @@ module.exports = grammar({
     bot: $ => choice("bot", "⊥"),
     top: $ => choice("top", "⊤"),
 
-    // `Type e` and `Rule e` bound their argument at application level.
+    // `Type e` bounds its argument at application level.
     type: $ => prec.left(PREC.app, seq("Type", field("level", $.expression))),
-    rule_type: $ => prec.left(PREC.app, seq("Rule", field("meta", $.expression))),
+
+    // `?` is a hole for inference to fill in, as a term or as a type.
+    hole: $ => "?",
 
     path: $ => seq(
       $.identifier,
@@ -524,6 +533,14 @@ module.exports = grammar({
       field("body", $.expression),
     )),
 
+    // `rl p: l when g => r` extends as far right as it can.
+    rule_expr: $ => prec.right(PREC.trailing, seq(
+      "rl",
+      field("pattern", $.pattern),
+      ":",
+      $._rule_body,
+    )),
+
     ret: $ => prec.right(PREC.trailing, seq(
       "ret",
       field("pattern", $.pattern),
@@ -573,7 +590,7 @@ module.exports = grammar({
       repeat(seq("|", $.match_arm)),
     )),
 
-    // A union arm is a plain pattern; a variant arm names its case, or gives its index, and may bind a payload.
+    // An arm on a non-variant is a plain pattern; a variant arm names its case, or gives its index, and may bind a payload.
     match_arm: $ => prec.right(PREC.trailing, seq(
       choice(
         field("pattern", $.pattern),
@@ -658,10 +675,18 @@ module.exports = grammar({
       optional(seq(":", field("payload", $.expression))),
     )),
 
-    union: $ => prec.left(PREC.union, seq(
+    // `T ↝ U` is the type of a rule from `T` to `U`.
+    rule_type: $ => prec.right(PREC.arrow, seq(
       field("left", $.expression),
-      "∪",
+      choice("↝", "~>"),
       field("right", $.expression),
+    )),
+
+    // `f ▷ g ▷ x` fires `g` first.
+    fire: $ => prec.right(PREC.fire, seq(
+      field("rule", $.expression),
+      choice("▷", "|>"),
+      field("argument", $.expression),
     )),
 
     injection: $ => prec.right(PREC.inj, seq(

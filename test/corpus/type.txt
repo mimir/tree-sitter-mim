@@ -61,7 +61,7 @@ let e = i64;
 rule type
 =====
 
-let r = Rule Nat;
+let r = Nat ↝ Nat ~> Nat;
 
 ---
 
@@ -69,7 +69,10 @@ let r = Rule Nat;
   (let
     (identifier)
     (rule_type
-      (primitive))))
+      (primitive)
+      (rule_type
+        (primitive)
+        (primitive)))))
 
 =====
 arrow type
@@ -335,27 +338,10 @@ let t = #f x + 1;
       (nat_literal))))
 
 =====
-union type
-=====
-
-let t = A ∪ B;
-
----
-
-(source_file
-  (let
-    (identifier)
-    (union
-      (path
-        (identifier))
-      (path
-        (identifier)))))
-
-=====
 injection
 =====
 
-let t = x inj A ∪ B;
+let t = x inj A → B;
 
 ---
 
@@ -365,11 +351,85 @@ let t = x inj A ∪ B;
     (injection
       (path
         (identifier))
-      (union
+      (pi
         (path
           (identifier))
         (path
           (identifier))))))
+
+=====
+fire
+=====
+
+let x = f ▷ g |> y → z;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (pi
+      (fire
+        (path
+          (identifier))
+        (fire
+          (path
+            (identifier))
+          (path
+            (identifier))))
+      (path
+        (identifier)))))
+
+=====
+rule expression
+=====
+
+let r = rl (a: Nat): a when a == a => a;
+
+---
+
+(source_file
+  (let
+    (identifier)
+    (rule_expr
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (primitive)))
+      (path
+        (identifier))
+      (binary_expression
+        (path
+          (identifier))
+        (path
+          (identifier)))
+      (path
+        (identifier)))))
+
+=====
+hole
+=====
+
+lam f (x: ?): Nat = g @? x;
+
+---
+
+(source_file
+  (lam
+    (identifier)
+    (domain
+      (tuple_pattern
+        (typed_binder
+          (identifier)
+          (hole))))
+    (primitive)
+    (application
+      (application
+        (path
+          (identifier))
+        (hole))
+      (path
+        (identifier)))))
 
 =====
 variant type
